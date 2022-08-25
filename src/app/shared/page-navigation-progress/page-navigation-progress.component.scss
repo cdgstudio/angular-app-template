@@ -1,0 +1,11 @@
+:host{
+  display: block;
+  height: 2px;
+  background: rgb(255, 0, 0);
+  width: 0vw;
+  transition: width 0.08s ease;
+}
+
+:host-context(.finish) :host {
+  width: 100vw !important;
+}
