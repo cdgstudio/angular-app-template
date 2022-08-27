@@ -12,6 +12,21 @@ export class ToDoFacade {
   constructor(private toDoApiService: ToDoApiService) {}
 
   setFilters(filters: Record<string, any> = {}): Observable<void> {
+    const statuses = [];
+    if (filters['statusTodo'] === true) {
+      statuses.push('TODO');
+    }
+    if (filters['statusDone'] === true) {
+      statuses.push('DONE');
+    }
+    if (filters['statusRemoved'] === true) {
+      statuses.push('REMOVED');
+    }
+
+    if (statuses.length > 0) {
+      filters['statuses'] = statuses;
+    }
+
     return this.toDoApiService.getToDos(filters).pipe(
       tap((toDos) => this.toDos$.next(toDos)),
       map(() => void 0),

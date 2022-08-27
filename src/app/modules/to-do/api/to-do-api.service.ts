@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import { map, Observable, of, switchMap, timer } from 'rxjs';
-import { ToDo } from './to-do.models';
+import { ToDo, ToDoStatus } from './to-do.models';
 import { faker } from '@faker-js/faker';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToDoApiService {
-  getToDos(filters: { query?: string } = {}): Observable<ToDo[]> {
-    const todos$ = of(Array.from({ length: 10 }).map(() => this.createToDo()));
+  getToDos(filters: { query?: string; statuses?: ToDoStatus[] } = {}): Observable<ToDo[]> {
+    const todos$ = of(
+      Array.from({ length: 10 }).map(() =>
+        this.createToDo({
+          status: faker.helpers.arrayElement(filters.statuses ?? ['TODO', 'REMOVED', 'DONE']),
+        }),
+      ),
+    );
 
     return timer(1_000).pipe(switchMap(() => todos$));
   }

@@ -41,11 +41,15 @@
 
   <ng-container *ngIf="toDos$ | async as todos">
     <tr *ngFor="let item of todos">
-      <td>{{ item.description }}</td>
+      <td [class.done]="item.status !== 'TODO'">{{ item.description }}</td>
       <td class="actions">
         <div>
-          <button (click)="markAsDone(item)" type="button" class="btn-done">Done</button>
-          <button (click)="remove(item)" type="button" class="btn-remove">Remove</button>
+          <button (click)="markAsDone(item)" type="button" class="btn-done" [disabled]="item.status === 'DONE'">
+            Done
+          </button>
+          <button (click)="remove(item)" type="button" class="btn-remove" [disabled]="item.status === 'REMOVED'">
+            Remove
+          </button>
         </div>
       </td>
     </tr>
