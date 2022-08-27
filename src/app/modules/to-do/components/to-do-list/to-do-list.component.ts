@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { delay, finalize, merge, switchMap, tap } from 'rxjs';
+import { delay, finalize, merge, Subscription, switchMap, tap } from 'rxjs';
 import { PageNavigationProgressService } from '../../../../shared/page-navigation-progress';
 import { ToDo } from '../../api/to-do.models';
 import { ToDoFacade } from '../../facades/to-do.facade';
@@ -14,31 +14,19 @@ import { ToDoFacade } from '../../facades/to-do.facade';
   providers: [ToDoFacade],
 })
 export class ToDoListComponent implements OnInit, OnDestroy {
+  private changesSubscription = new Subscription();
   private get queryParams(): ParamMap {
     return this.activatedRoute.snapshot.queryParamMap;
   }
 
   searchForm = new FormGroup({
-    query: new FormControl(this.queryParams.has('query') ? String(this.queryParams.get('query')) : '', {
-      nonNullable: true,
-    }),
-    statusTodo: new FormControl(this.queryParams.get('statusTodo') !== 'false', { nonNullable: true }),
-    statusDone: new FormControl(this.queryParams.get('statusDone') === 'true', { nonNullable: true }),
-    statusRemoved: new FormControl(this.queryParams.get('statusRemoved') === 'true', { nonNullable: true }),
+    query: new FormControl('', { nonNullable: true }),
+    statusTodo: new FormControl(true, { nonNullable: true }),
+    statusDone: new FormControl(false, { nonNullable: true }),
+    statusRemoved: new FormControl(false, { nonNullable: true }),
   });
 
   toDos$ = this.toDoFacade.toDos$;
-
-  private changesSubscription = merge(
-    this.searchForm.controls.statusDone.valueChanges,
-    this.searchForm.controls.statusRemoved.valueChanges,
-    this.searchForm.controls.statusTodo.valueChanges,
-  )
-    .pipe(
-      delay(0),
-      tap(() => this.search()),
-    )
-    .subscribe();
 
   constructor(
     private toDoFacade: ToDoFacade,
@@ -48,10 +36,37 @@ export class ToDoListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.searchForm.patchValue({
+      query: this.queryParams.has('query')
+        ? String(this.queryParams.get('query'))
+        : this.searchForm.controls.query.defaultValue,
+      statusTodo: this.queryParams.has('statusTodo')
+        ? this.queryParams.get('statusTodo') !== 'false'
+        : this.searchForm.controls.statusTodo.defaultValue,
+      statusDone: this.queryParams.has('statusDone')
+        ? this.queryParams.get('statusDone') === 'true'
+        : this.searchForm.controls.statusDone.defaultValue,
+      statusRemoved: this.queryParams.has('statusRemoved')
+        ? this.queryParams.get('statusRemoved') === 'true'
+        : this.searchForm.controls.statusRemoved.defaultValue,
+    });
+
     this.pageNavigationProgressService.show();
     this.toDoFacade
       .setFilters()
       .pipe(finalize(() => this.pageNavigationProgressService.hide()))
+      .subscribe();
+
+    this.changesSubscription.unsubscribe();
+    this.changesSubscription = merge(
+      this.searchForm.controls.statusDone.valueChanges,
+      this.searchForm.controls.statusRemoved.valueChanges,
+      this.searchForm.controls.statusTodo.valueChanges,
+    )
+      .pipe(
+        delay(0),
+        tap(() => this.search()),
+      )
       .subscribe();
   }
 

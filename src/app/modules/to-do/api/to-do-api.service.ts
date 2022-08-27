@@ -8,6 +8,7 @@ import { faker } from '@faker-js/faker';
 })
 export class ToDoApiService {
   getToDos(filters: { query?: string; statuses?: ToDoStatus[] } = {}): Observable<ToDo[]> {
+    console.log('called');
     const todos$ = of(
       Array.from({ length: 10 }).map(() =>
         this.createToDo({

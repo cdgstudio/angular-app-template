@@ -24,7 +24,7 @@ export class ToDoFacade {
     }
 
     if (statuses.length > 0) {
-      filters['statuses'] = statuses;
+      filters = { ...filters, statuses: statuses };
     }
 
     return this.toDoApiService.getToDos(filters).pipe(
