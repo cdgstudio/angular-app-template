@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { finalize, switchMap } from 'rxjs';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { delay, finalize, merge, switchMap, tap } from 'rxjs';
 import { PageNavigationProgressService } from '../../../../shared/page-navigation-progress';
 import { ToDo } from '../../api/to-do.models';
 import { ToDoFacade } from '../../facades/to-do.facade';
@@ -13,16 +13,32 @@ import { ToDoFacade } from '../../facades/to-do.facade';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ToDoFacade],
 })
-export class ToDoListComponent implements OnInit {
-  private get queryParams(): Params {
-    return this.activatedRoute.snapshot.queryParams;
+export class ToDoListComponent implements OnInit, OnDestroy {
+  private get queryParams(): ParamMap {
+    return this.activatedRoute.snapshot.queryParamMap;
   }
 
   searchForm = new FormGroup({
-    query: new FormControl(this.queryParams['query'] ?? '', { nonNullable: true }),
+    query: new FormControl(this.queryParams.has('query') ? String(this.queryParams.get('query')) : '', {
+      nonNullable: true,
+    }),
+    statusTodo: new FormControl(this.queryParams.get('statusTodo') !== 'false', { nonNullable: true }),
+    statusDone: new FormControl(this.queryParams.get('statusDone') === 'true', { nonNullable: true }),
+    statusRemoved: new FormControl(this.queryParams.get('statusRemoved') === 'true', { nonNullable: true }),
   });
 
   toDos$ = this.toDoFacade.toDos$;
+
+  private changesSubscription = merge(
+    this.searchForm.controls.statusDone.valueChanges,
+    this.searchForm.controls.statusRemoved.valueChanges,
+    this.searchForm.controls.statusTodo.valueChanges,
+  )
+    .pipe(
+      delay(0),
+      tap(() => this.search()),
+    )
+    .subscribe();
 
   constructor(
     private toDoFacade: ToDoFacade,
@@ -60,18 +76,32 @@ export class ToDoListComponent implements OnInit {
       return;
     }
 
+    const formValues = this.searchForm.value;
+    const newQueryParams: typeof formValues = {};
+
+    let key: keyof typeof formValues;
+    for (key in formValues) {
+      if (this.searchForm.controls[key].defaultValue !== formValues[key]) {
+        newQueryParams[key] = formValues[key] as any;
+      }
+    }
+
     this.pageNavigationProgressService.show();
     this.toDoFacade
-      .setFilters(this.searchForm.value)
+      .setFilters(formValues)
       .pipe(
         switchMap(() =>
           this.router.navigate([], {
             relativeTo: this.activatedRoute,
-            queryParams: this.searchForm.value,
+            queryParams: newQueryParams,
           }),
         ),
         finalize(() => this.pageNavigationProgressService.hide()),
       )
       .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.changesSubscription.unsubscribe();
   }
 }
