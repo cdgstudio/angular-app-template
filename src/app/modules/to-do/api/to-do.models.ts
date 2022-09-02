@@ -4,4 +4,4 @@ export interface ToDo {
   status: ToDoStatus;
 }
 
-export type ToDoStatus = 'DONE' | 'TODO' | 'REMOVED';
+export type ToDoStatus = 'DONE' | 'TO_DO';

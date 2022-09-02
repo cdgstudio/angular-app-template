@@ -49,15 +49,12 @@ th {
 }
 
 .actions {
-  width: 150px;
-
-  div {
+  width: 75px;
+  > button {
+    width: 100%;
     display: flex;
-    gap: 15px;
-
-    > button {
-      width: 50%;
-    }
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -79,4 +76,42 @@ th {
 
 .done {
   text-decoration: line-through;
+}
+
+td {
+  height: 3rem;
+}
+
+td.loading .bar {
+  background-color: #e9ecef;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+
+  width: calc(100% - 2rem);
+  height: 1rem;
+  margin-left: 1rem;
+
+  &::after {
+    content: "";
+    animation: animate 1.2s infinite;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-100%);
+    z-index: 1;
+
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+  }
+}
+
+@keyframes animate {
+  0% {
+    transform: translate(-100%);
+  }
+  to {
+    transform: translate(100%);
+  }
 }

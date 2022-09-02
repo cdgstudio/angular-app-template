@@ -23,7 +23,6 @@ export class ToDoListComponent implements OnInit, OnDestroy {
     query: new FormControl('', { nonNullable: true }),
     statusTodo: new FormControl(true, { nonNullable: true }),
     statusDone: new FormControl(false, { nonNullable: true }),
-    statusRemoved: new FormControl(false, { nonNullable: true }),
   });
 
   toDos$ = this.toDoFacade.toDos$;
@@ -46,9 +45,6 @@ export class ToDoListComponent implements OnInit, OnDestroy {
       statusDone: this.queryParams.has('statusDone')
         ? this.queryParams.get('statusDone') === 'true'
         : this.searchForm.controls.statusDone.defaultValue,
-      statusRemoved: this.queryParams.has('statusRemoved')
-        ? this.queryParams.get('statusRemoved') === 'true'
-        : this.searchForm.controls.statusRemoved.defaultValue,
     });
 
     this.pageNavigationProgressService.show();
@@ -60,7 +56,6 @@ export class ToDoListComponent implements OnInit, OnDestroy {
     this.changesSubscription.unsubscribe();
     this.changesSubscription = merge(
       this.searchForm.controls.statusDone.valueChanges,
-      this.searchForm.controls.statusRemoved.valueChanges,
       this.searchForm.controls.statusTodo.valueChanges,
     )
       .pipe(
@@ -78,10 +73,10 @@ export class ToDoListComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  remove(task: ToDo): void {
+  markAsToDo(task: ToDo): void {
     this.pageNavigationProgressService.show();
     this.toDoFacade
-      .markAsRemoved(task)
+      .markAsToDo(task)
       .pipe(finalize(() => this.pageNavigationProgressService.hide()))
       .subscribe();
   }

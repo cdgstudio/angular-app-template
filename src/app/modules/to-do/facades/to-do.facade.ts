@@ -14,7 +14,7 @@ export class ToDoFacade {
   setFilters(filters: Record<string, any> = {}): Observable<void> {
     const statuses = [];
     if (filters['statusTodo'] === true) {
-      statuses.push('TODO');
+      statuses.push('TO_DO');
     }
     if (filters['statusDone'] === true) {
       statuses.push('DONE');
@@ -40,8 +40,8 @@ export class ToDoFacade {
     );
   }
 
-  markAsRemoved(toDo: ToDo): Observable<void> {
-    return this.toDoApiService.markAsRemoved(toDo).pipe(
+  markAsToDo(toDo: ToDo): Observable<void> {
+    return this.toDoApiService.markAsToDo(toDo).pipe(
       switchMap((doneToDo) => this.replaceToDo(doneToDo)),
       map(() => void 0),
     );
