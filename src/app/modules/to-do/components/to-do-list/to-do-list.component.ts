@@ -49,7 +49,9 @@ export class ToDoListComponent implements OnInit, OnDestroy {
 
     this.pageNavigationProgressService.show();
     this.toDoFacade
-      .setFilters()
+      .setFilters({
+        statusTodo: true,
+      })
       .pipe(finalize(() => this.pageNavigationProgressService.hide()))
       .subscribe();
 

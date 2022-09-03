@@ -88,9 +88,7 @@ td.loading .bar {
   position: relative;
   overflow: hidden;
 
-  width: calc(100% - 2rem);
   height: 1rem;
-  margin-left: 1rem;
 
   &::after {
     content: "";

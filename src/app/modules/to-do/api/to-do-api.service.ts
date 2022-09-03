@@ -20,11 +20,11 @@ export class ToDoApiService {
   }
 
   markAsDone(toDo: ToDo): Observable<ToDo> {
-    return timer(1_500).pipe(map(() => ({ ...toDo, status: 'DONE' })));
+    return timer(500).pipe(map(() => ({ ...toDo, status: 'DONE' })));
   }
 
   markAsToDo(toDo: ToDo): Observable<ToDo> {
-    return timer(2_500).pipe(map(() => ({ ...toDo, status: 'TO_DO' })));
+    return timer(500).pipe(map(() => ({ ...toDo, status: 'TO_DO' })));
   }
 
   private createToDo(initialData: Partial<ToDo> = {}): ToDo {
