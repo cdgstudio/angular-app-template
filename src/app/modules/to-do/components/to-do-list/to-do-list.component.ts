@@ -47,13 +47,7 @@ export class ToDoListComponent implements OnInit, OnDestroy {
         : this.searchForm.controls.statusDone.defaultValue,
     });
 
-    this.pageNavigationProgressService.show();
-    this.toDoFacade
-      .setFilters({
-        statusTodo: true,
-      })
-      .pipe(finalize(() => this.pageNavigationProgressService.hide()))
-      .subscribe();
+    this.search();
 
     this.changesSubscription.unsubscribe();
     this.changesSubscription = merge(
