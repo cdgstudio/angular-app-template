@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageSidebarComponent } from './page-sidebar.component';
+import { FluidContainerComponent } from './fluid-container.component';
 
-describe('PageSidebarComponent', () => {
-  let component: PageSidebarComponent;
-  let fixture: ComponentFixture<PageSidebarComponent>;
+describe('FluidContainerComponent', () => {
+  let component: FluidContainerComponent;
+  let fixture: ComponentFixture<FluidContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PageSidebarComponent ]
+      declarations: [ FluidContainerComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PageSidebarComponent);
+    fixture = TestBed.createComponent(FluidContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

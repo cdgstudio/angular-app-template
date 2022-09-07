@@ -1,5 +1,6 @@
 :host {
-  display: block;
+  display: grid;
+  grid-template-columns: 10% 1fr;
 }
 
 h3,
@@ -22,4 +23,9 @@ a {
 a:hover {
   color: #000;
   background-color: #ccc;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
 }

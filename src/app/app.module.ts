@@ -3,11 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PageSidebarModule } from './layout/page-sidebar/page-sidebar.module';
+import { FluidContainerModule } from './layouts/fluid-container';
+import { ContainerWithSidebarModule } from './layouts/container-with-sidebar';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, OverlayModule, PageSidebarModule],
+  imports: [BrowserModule, AppRoutingModule, OverlayModule, FluidContainerModule, ContainerWithSidebarModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
