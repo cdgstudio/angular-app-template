@@ -1,1 +1,18 @@
-<p>login works!</p>
+<div class="center">
+  <h1>Login</h1>
+  <form [formGroup]="loginForm">
+    <div class="txt_field">
+      <input #loginInput type="text" formControlName="login" required />
+      <span></span>
+      <label>Username</label>
+    </div>
+    <div class="txt_field">
+      <input type="password" formControlName="password" required />
+      <span></span>
+      <label>Password</label>
+    </div>
+    <div class="pass">Forgot Password?</div>
+    <button (click)="sendForm()" type="submit">Login</button>
+    <div class="signup_link">Not a member? <a href="#">Signup</a></div>
+  </form>
+</div>
