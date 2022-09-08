@@ -26,6 +26,11 @@ const routes: Routes = [
         path: 'login',
         loadChildren: () => import('./modules/auth/login/login.module').then((m) => m.LoginModule),
       },
+      {
+        path: 'lost-password',
+        loadChildren: () =>
+          import('./modules/auth/lost-password/lost-password.module').then((m) => m.LostPasswordModule),
+      },
     ],
   },
 ];
