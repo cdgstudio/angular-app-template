@@ -1,7 +1,7 @@
 <div class="box">
   <h1>Sign up</h1>
 
-  <form [formGroup]="signUpForm">
+  <form [formGroup]="signUpForm" cdkTrapFocus cdkTrapFocusAutoCapture>
     <div class="txt_field">
       <label for="email"> E-mail address </label>
       <input id="email" #emailAddress type="text" formControlName="email" />

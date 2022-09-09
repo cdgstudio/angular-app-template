@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -7,9 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginPage implements OnInit {
-  @ViewChild('loginInput', { static: true }) loginInput!: ElementRef<HTMLInputElement>;
-
+export class LoginPage {
   loginForm = new FormGroup({
     login: new FormControl('', {
       validators: [Validators.required],
@@ -20,10 +18,6 @@ export class LoginPage implements OnInit {
       nonNullable: true,
     }),
   });
-
-  ngOnInit(): void {
-    this.loginInput.nativeElement.focus();
-  }
 
   sendForm() {
     if (this.loginForm.valid) {

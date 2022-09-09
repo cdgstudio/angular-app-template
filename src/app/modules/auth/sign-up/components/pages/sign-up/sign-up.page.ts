@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-up',
@@ -7,9 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./sign-up.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignUpPage implements OnInit {
-  @ViewChild('emailAddress', { static: true }) emailAddressInput!: ElementRef<HTMLInputElement>;
-
+export class SignUpPage {
   signUpForm = new FormGroup({
     email: new FormControl('', {
       validators: [Validators.required, Validators.email],
@@ -24,8 +22,4 @@ export class SignUpPage implements OnInit {
       nonNullable: true,
     }),
   });
-
-  ngOnInit(): void {
-    this.emailAddressInput.nativeElement.focus();
-  }
 }

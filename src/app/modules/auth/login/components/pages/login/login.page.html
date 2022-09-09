@@ -1,6 +1,6 @@
 <div class="box">
   <h1>Login</h1>
-  <form [formGroup]="loginForm">
+  <form [formGroup]="loginForm" cdkTrapFocus cdkTrapFocusAutoCapture>
     <div class="txt_field">
       <label for="login">Username</label>
       <input id="login" #loginInput type="text" formControlName="login" />
