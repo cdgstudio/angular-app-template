@@ -31,6 +31,10 @@ const routes: Routes = [
         loadChildren: () =>
           import('./modules/auth/lost-password/lost-password.module').then((m) => m.LostPasswordModule),
       },
+      {
+        path: 'sign-up',
+        loadChildren: () => import('./modules/auth/sign-up/sign-up.module').then((m) => m.SignUpModule),
+      },
     ],
   },
 ];

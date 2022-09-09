@@ -38,14 +38,6 @@ form {
   flex-direction: column;
 }
 
-.pass {
-  color: #a6a6a6;
-}
-
-.pass:hover {
-  text-decoration: underline;
-}
-
 button[type="submit"] {
   font-size: 0.9rem;
 }
@@ -63,13 +55,4 @@ button[type="submit"] {
 
 .signup_link a:hover {
   text-decoration: underline;
-}
-
-.forgot {
-  font-size: 0.9rem;
-}
-
-.info {
-  margin-bottom: 1.5rem;
-  text-align: justify;
 }

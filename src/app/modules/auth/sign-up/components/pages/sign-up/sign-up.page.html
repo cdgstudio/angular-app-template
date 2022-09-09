@@ -1,0 +1,24 @@
+<div class="box">
+  <h1>Sign up</h1>
+
+  <form [formGroup]="signUpForm">
+    <div class="txt_field">
+      <label for="email"> E-mail address </label>
+      <input id="email" #emailAddress type="text" formControlName="email" />
+    </div>
+
+    <div class="txt_field">
+      <label for="password"> Password </label>
+      <input id="password" type="password" formControlName="password" />
+    </div>
+
+    <div class="txt_field">
+      <label for="repeatedPassword"> Repeat password </label>
+      <input id="repeatedPassword" type="password" formControlName="repeatedPassword" />
+    </div>
+
+    <button type="submit">Create account</button>
+
+    <div class="signup_link">Have a account? <a routerLink="/auth/login">Login</a></div>
+  </form>
+</div>
