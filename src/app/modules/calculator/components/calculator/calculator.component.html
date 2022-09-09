@@ -1,21 +1,21 @@
 <app-display></app-display>
 
-<button (click)="addToDisplay(7)" accesskey="a">7</button>
-<button (click)="addToDisplay(8)">8</button>
-<button (click)="addToDisplay(9)">9</button>
-<button (click)="addToDisplay('/')">/</button>
+<button appShortcut="7" (click)="addToDisplay(7)">7</button>
+<button appShortcut="8" (click)="addToDisplay(8)">8</button>
+<button appShortcut="9" (click)="addToDisplay(9)">9</button>
+<button appShortcut="/" (click)="addToDisplay('/')">/</button>
 
-<button (click)="addToDisplay(4)">4</button>
-<button (click)="addToDisplay(5)">5</button>
-<button (click)="addToDisplay(6)">6</button>
-<button (click)="addToDisplay('*')">*</button>
+<button appShortcut="4" (click)="addToDisplay(4)">4</button>
+<button appShortcut="5" (click)="addToDisplay(5)">5</button>
+<button appShortcut="6" (click)="addToDisplay(6)">6</button>
+<button appShortcut="*" (click)="addToDisplay('*')">*</button>
 
-<button (click)="addToDisplay(1)">1</button>
-<button (click)="addToDisplay(2)">2</button>
-<button (click)="addToDisplay(3)">3</button>
-<button (click)="addToDisplay('-')">-</button>
+<button appShortcut="1" (click)="addToDisplay(1)">1</button>
+<button appShortcut="2" (click)="addToDisplay(2)">2</button>
+<button appShortcut="3" (click)="addToDisplay(3)">3</button>
+<button appShortcut="-" (click)="addToDisplay('-')">-</button>
 
-<button (click)="addToDisplay(0)">0</button>
-<button (click)="addToDisplay('.')">.</button>
-<button (click)="calculate()">=</button>
-<button (click)="addToDisplay('+')">+</button>
+<button appShortcut="0" (click)="addToDisplay(0)">0</button>
+<button appShortcut="." (click)="addToDisplay('.')">.</button>
+<button appShortcut="Enter" (click)="calculate()">=</button>
+<button appShortcut="+" (click)="addToDisplay('+')">+</button>
