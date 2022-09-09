@@ -1,5 +1,13 @@
 <input #displey type="text" [value]="input$ | async" (change)="setInput($event)" />
 
-<div *ngIf="invalid$ | async as r" class="errors">
-  {{ r }}
-</div>
+<ng-container *ngIf="invalid$ | async as result">
+  <div *ngIf="result | isError; else goodResult" class="errors">
+    {{ result }}
+  </div>
+
+  <ng-template #goodResult>
+    <div class="result">
+      {{ result }}
+    </div>
+  </ng-template>
+</ng-container>
