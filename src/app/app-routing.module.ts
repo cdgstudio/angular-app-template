@@ -9,6 +9,11 @@ const routes: Routes = [
     component: ContainerWithSidebarComponent,
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        loadChildren: () => import('./modules/dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
+      {
         path: 'to-do',
         loadChildren: () => import('./modules/to-do/to-do.module').then((m) => m.ToDoModule),
       },
