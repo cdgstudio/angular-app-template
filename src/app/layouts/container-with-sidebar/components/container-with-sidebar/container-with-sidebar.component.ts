@@ -4,13 +4,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   selector: 'app-container-with-sidebar',
   templateUrl: './container-with-sidebar.component.html',
   styleUrls: ['./container-with-sidebar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContainerWithSidebarComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class ContainerWithSidebarComponent {
+  collapsed = true;
 }
