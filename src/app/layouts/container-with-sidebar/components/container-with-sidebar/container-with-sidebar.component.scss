@@ -71,6 +71,8 @@ ul {
 
 @media screen and (max-width: 1000px) {
   a {
+    justify-content: center;
+
     svg {
       width: 1.5rem;
       height: 1.5rem;
@@ -120,6 +122,8 @@ ul {
   }
 
   a {
+    justify-content: flex-start;
+
     svg {
       width: 1rem;
       height: 1rem;
