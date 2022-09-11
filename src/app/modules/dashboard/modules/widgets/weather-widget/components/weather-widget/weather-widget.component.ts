@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { map, Observable, tap, timer } from 'rxjs';
 import { Reloadable, RELOADABLE } from '../../../reloadable-widget';
+import { EDITABLE } from '../../../widget-edit';
 
 @Component({
   selector: 'app-weather-widget',
@@ -11,6 +12,11 @@ import { Reloadable, RELOADABLE } from '../../../reloadable-widget';
     {
       provide: RELOADABLE,
       useExisting: WeatherWidgetComponent,
+    },
+    {
+      provide: EDITABLE,
+      useValue: () =>
+        import('../../../weather-widget-edit/weather-widget-edit.module').then((m) => m.WeatherWidgetEditModule),
     },
   ],
 })

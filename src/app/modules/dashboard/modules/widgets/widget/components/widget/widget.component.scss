@@ -33,18 +33,10 @@ ul {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
-:disabled,
-.reloading {
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: default;
-  user-select: none;
-}
-
-.reload {
+button {
   border-radius: 100%;
   border: none;
   color: black;
@@ -54,4 +46,12 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+:disabled,
+.reloading {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+  user-select: none;
 }
