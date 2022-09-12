@@ -1,8 +1,4 @@
 :host {
-  display: block;
-}
-
-nav {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -48,8 +44,7 @@ button {
   align-items: center;
 }
 
-:disabled,
-.reloading {
+:disabled {
   opacity: 0.5;
   pointer-events: none;
   cursor: default;

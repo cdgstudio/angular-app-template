@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WidgetComponent } from './components/widget/widget.component';
+import { WidgetToolbarComponent } from './components/widget-toolbar/widget-toolbar.component';
 
 @NgModule({
-  declarations: [WidgetComponent],
+  declarations: [WidgetToolbarComponent],
   imports: [CommonModule],
-  exports: [WidgetComponent],
+  exports: [WidgetToolbarComponent],
 })
 export class WidgetModule {}

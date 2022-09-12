@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { map, Observable, tap, timer } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Reloadable, RELOADABLE } from '../../../reloadable-widget';
 import { Editable, EDITABLE, EDIT_FORM } from '../../../widget-edit';
 import { OpenWeather } from '../../services/open-weather.models';
@@ -10,7 +10,7 @@ import { OpenWeatherService } from '../../services/open-weather.service';
   templateUrl: './weather-widget.component.html',
   styleUrls: ['./weather-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
+  viewProviders: [
     { provide: RELOADABLE, useExisting: WeatherWidgetComponent },
     { provide: EDITABLE, useExisting: WeatherWidgetComponent },
     {
@@ -24,12 +24,10 @@ export class WeatherWidgetComponent implements OnInit, Reloadable, Editable {
   protected city = 'Warsaw';
   protected lastResponse?: OpenWeather;
 
-  constructor(private changeDetector: ChangeDetectorRef, private openWeatherService: OpenWeatherService) {
-    changeDetector.detach();
-  }
+  constructor(private changeDetector: ChangeDetectorRef, private openWeatherService: OpenWeatherService) {}
 
   ngOnInit() {
-    this.changeDetector.detectChanges();
+    this.changeDetector.markForCheck();
     this.reload().subscribe();
   }
 
@@ -37,7 +35,7 @@ export class WeatherWidgetComponent implements OnInit, Reloadable, Editable {
     return this.openWeatherService.getWeatherForCity(this.city).pipe(
       tap((data) => (this.lastResponse = data)),
       map(() => void 0),
-      tap(() => this.changeDetector.detectChanges()),
+      tap(() => this.changeDetector.markForCheck()),
     );
   }
 

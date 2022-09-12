@@ -1,8 +1,7 @@
 <div class="dashboard">
-  <app-widget *ngFor="let _ of widgets">
-    <ng-container title>Weather widget</ng-container>
+  <ng-container *ngFor="let _ of widgets">
     <app-weather-widget></app-weather-widget>
-  </app-widget>
+  </ng-container>
 
   <button (click)="addNewWidget()" class="add-new-widget">
     <!-- prettier-ignore -->

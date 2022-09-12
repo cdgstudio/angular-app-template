@@ -5,35 +5,38 @@ import {
   ChangeDetectorRef,
   Compiler,
   Component,
-  ContentChild,
+  Host,
+  Inject,
   Injector,
   NgModuleRef,
+  Optional,
   Type,
 } from '@angular/core';
-import { finalize, switchMap, tap } from 'rxjs';
-import { Reloadable, RELOADABLE } from '../../../reloadable-widget';
+import { finalize, switchMap } from 'rxjs';
+import { RELOADABLE, Reloadable } from '../../../reloadable-widget';
 import { EDITABLE, Editable, EditableWidgetForm, EDIT_FORM } from '../../../widget-edit';
 
 const loadedModules = new Map<Type<EditableWidgetForm>, NgModuleRef<unknown>>();
 
 @Component({
-  selector: 'app-widget',
-  templateUrl: './widget.component.html',
-  styleUrls: ['./widget.component.scss'],
+  selector: 'app-widget-toolbar',
+  templateUrl: './widget-toolbar.component.html',
+  styleUrls: ['./widget-toolbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WidgetComponent {
-  @ContentChild(RELOADABLE, { static: true, descendants: false }) reloadableWidget: Reloadable | null = null;
-  @ContentChild(EDITABLE, { static: true, descendants: false }) editableWidget: Editable | null = null;
-  @ContentChild(EDIT_FORM, { static: true, descendants: false }) getEditComponentModule!: () => Promise<
-    Type<EditableWidgetForm>
-  >;
-
+export class WidgetToolbarComponent {
   constructor(
     private changeDetector: ChangeDetectorRef,
     private compiler: Compiler,
     private injector: Injector,
     private overlay: Overlay,
+
+    @Optional() @Host() @Inject(RELOADABLE) public reloadableWidget: Reloadable | null,
+    @Optional() @Host() @Inject(EDITABLE) private editableWidget: Editable | null,
+    @Optional()
+    @Host()
+    @Inject(EDIT_FORM)
+    public getEditComponentModule: () => Promise<Type<EditableWidgetForm>> | null,
   ) {}
 
   protected isReloading = false;
@@ -48,7 +51,7 @@ export class WidgetComponent {
       .pipe(
         finalize(() => {
           this.isReloading = false;
-          this.changeDetector.markForCheck();
+          this.changeDetector.detectChanges();
         }),
       )
       .subscribe();
@@ -57,7 +60,7 @@ export class WidgetComponent {
   async edit() {
     this.isReloading = true;
 
-    const moduleSource = await this.getEditComponentModule();
+    const moduleSource = await this.getEditComponentModule()!;
 
     if (loadedModules.has(moduleSource) === false) {
       const factory = await this.compiler.compileModuleAsync(moduleSource);
@@ -91,7 +94,7 @@ export class WidgetComponent {
         switchMap((newData) => this.editableWidget!.setNewData(newData)),
         finalize(() => {
           this.isReloading = false;
-          this.changeDetector.markForCheck();
+          this.changeDetector.detectChanges();
         }),
       )
       .subscribe();

@@ -5,9 +5,9 @@ import { OpenWeather } from '../services/open-weather.models';
   name: 'weatherIconUrl',
 })
 export class WeatherIconUrlPipe implements PipeTransform {
-  transform(weather: OpenWeather | undefined): string {
+  transform(weather: OpenWeather | undefined): string | null {
     if (weather === void 0) {
-      return 'https://openweathermap.org/img/wn/01d@2x.png';
+      return null;
     }
 
     return `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`;

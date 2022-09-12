@@ -1,2 +1,2 @@
 export { WidgetModule } from './widget.module';
-export { WidgetComponent } from './components/widget/widget.component';
+export { WidgetToolbarComponent } from './components/widget-toolbar/widget-toolbar.component';
