@@ -1,7 +1,13 @@
 :host {
   display: block;
-  padding: 1rem 2rem;
-  background: #fff;
+}
 
-  text-align: right;
+label,
+select {
+  display: block;
+  width: 100%;
+}
+
+label {
+  margin-bottom: 0.5rem;
 }

@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { map, Observable, tap, timer } from 'rxjs';
 import { Reloadable, RELOADABLE } from '../../../reloadable-widget';
-import { EDITABLE } from '../../../widget-edit';
+import { Editable, EDITABLE, EDIT_FORM } from '../../../widget-edit';
+import { OpenWeather } from '../../services/open-weather.models';
+import { OpenWeatherService } from '../../services/open-weather.service';
 
 @Component({
   selector: 'app-weather-widget',
@@ -9,22 +11,20 @@ import { EDITABLE } from '../../../widget-edit';
   styleUrls: ['./weather-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
+    { provide: RELOADABLE, useExisting: WeatherWidgetComponent },
+    { provide: EDITABLE, useExisting: WeatherWidgetComponent },
     {
-      provide: RELOADABLE,
-      useExisting: WeatherWidgetComponent,
-    },
-    {
-      provide: EDITABLE,
+      provide: EDIT_FORM,
       useValue: () =>
         import('../../../weather-widget-edit/weather-widget-edit.module').then((m) => m.WeatherWidgetEditModule),
     },
   ],
 })
-export class WeatherWidgetComponent implements OnInit, Reloadable {
-  protected weather = ['sunny', 'rain', 'snow', 'question'] as const;
-  protected currentWeather: typeof this.weather[number] = 'question';
+export class WeatherWidgetComponent implements OnInit, Reloadable, Editable {
+  protected city = 'Warsaw';
+  protected lastResponse?: OpenWeather;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(private changeDetector: ChangeDetectorRef, private openWeatherService: OpenWeatherService) {
     changeDetector.detach();
   }
 
@@ -34,10 +34,15 @@ export class WeatherWidgetComponent implements OnInit, Reloadable {
   }
 
   reload(): Observable<void> {
-    return timer(1_500).pipe(
-      tap(() => (this.currentWeather = this.weather[(this.weather.length * Math.random()) | 0])),
+    return this.openWeatherService.getWeatherForCity(this.city).pipe(
+      tap((data) => (this.lastResponse = data)),
       map(() => void 0),
       tap(() => this.changeDetector.detectChanges()),
     );
+  }
+
+  setNewData(value: any): Observable<void> {
+    this.city = value.city;
+    return this.reload();
   }
 }

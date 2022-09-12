@@ -11,6 +11,17 @@
   gap: 1rem;
 }
 
+.add-new-widget {
+  background: transparent;
+  border: 1px dashed #000;
+
+  > svg {
+    width: 3rem;
+    height: auto;
+    opacity: 0.5;
+  }
+}
+
 @media screen and (max-width: 1450px) {
   .dashboard {
     grid-template-columns: repeat(2, 1fr);

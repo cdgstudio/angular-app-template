@@ -1,3 +1,21 @@
-<p>weather-widget-edit works!</p>
+<form id="form" app-modal [formGroup]="form" (ngSubmit)="update()">
+  <app-modal-header>
+    <h2 app-modal-title>Edit weather widget</h2>
+  </app-modal-header>
 
-<button (click)="close()">Close</button>
+  <app-modal-body>
+    <div>
+      <label for="city">City</label>
+      <select id="city" formControlName="city">
+        <option value="London">London</option>
+        <option value="Warsaw">Warsaw</option>
+        <option value="Washington">Washington</option>
+        <option value="Madryt">Madryt</option>
+      </select>
+    </div>
+  </app-modal-body>
+
+  <app-modal-footer>
+    <button type="submit" form="form">Update</button>
+  </app-modal-footer>
+</form>

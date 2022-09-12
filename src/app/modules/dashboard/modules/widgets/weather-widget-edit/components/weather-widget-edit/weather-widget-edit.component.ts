@@ -1,6 +1,7 @@
 import { OverlayRef } from '@angular/cdk/overlay';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject, timer } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
 import { EditableWidgetForm } from '../../../widget-edit';
 
 @Component({
@@ -10,6 +11,13 @@ import { EditableWidgetForm } from '../../../widget-edit';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherWidgetEditComponent implements EditableWidgetForm, OnDestroy {
+  form = new FormGroup({
+    city: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+  });
+
   private newData$ = new Subject<any>();
   constructor(private overlayRef: OverlayRef) {}
 
@@ -17,8 +25,12 @@ export class WeatherWidgetEditComponent implements EditableWidgetForm, OnDestroy
     return this.newData$;
   }
 
+  update() {
+    this.newData$.next(this.form.value);
+    this.close();
+  }
+
   close() {
-    this.newData$.next('OK');
     this.overlayRef.detach();
   }
 

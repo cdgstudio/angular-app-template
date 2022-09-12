@@ -10,9 +10,9 @@ import {
   NgModuleRef,
   Type,
 } from '@angular/core';
-import { EMPTY, finalize, switchMap } from 'rxjs';
+import { finalize, switchMap, tap } from 'rxjs';
 import { Reloadable, RELOADABLE } from '../../../reloadable-widget';
-import { EDITABLE, EditableWidgetForm, WIDGET_EDIT_COMPONENT } from '../../../widget-edit';
+import { EDITABLE, Editable, EditableWidgetForm, EDIT_FORM } from '../../../widget-edit';
 
 const loadedModules = new Map<Type<EditableWidgetForm>, NgModuleRef<unknown>>();
 
@@ -24,7 +24,8 @@ const loadedModules = new Map<Type<EditableWidgetForm>, NgModuleRef<unknown>>();
 })
 export class WidgetComponent {
   @ContentChild(RELOADABLE, { static: true, descendants: false }) reloadableWidget: Reloadable | null = null;
-  @ContentChild(EDITABLE, { static: true, descendants: false }) getEditComponentModule!: () => Promise<
+  @ContentChild(EDITABLE, { static: true, descendants: false }) editableWidget: Editable | null = null;
+  @ContentChild(EDIT_FORM, { static: true, descendants: false }) getEditComponentModule!: () => Promise<
     Type<EditableWidgetForm>
   >;
 
@@ -54,6 +55,8 @@ export class WidgetComponent {
   }
 
   async edit() {
+    this.isReloading = true;
+
     const moduleSource = await this.getEditComponentModule();
 
     if (loadedModules.has(moduleSource) === false) {
@@ -63,7 +66,7 @@ export class WidgetComponent {
     }
 
     const moduleRef = loadedModules.get(moduleSource)!;
-    const EditComponent = moduleRef.injector.get(WIDGET_EDIT_COMPONENT);
+    const EditComponent = moduleRef.injector.get(EDITABLE);
 
     const overlayRef = this.overlay.create({
       positionStrategy: new GlobalPositionStrategy().centerHorizontally().centerVertically(),
@@ -82,12 +85,10 @@ export class WidgetComponent {
     const portal = new ComponentPortal(EditComponent, null, widgetInjector);
     const ref = overlayRef.attach(portal);
 
-    this.isReloading = true;
-    this.changeDetector.markForCheck();
     ref.instance
       .getNewData()
       .pipe(
-        switchMap(() => this.reloadableWidget?.reload() ?? EMPTY),
+        switchMap((newData) => this.editableWidget!.setNewData(newData)),
         finalize(() => {
           this.isReloading = false;
           this.changeDetector.markForCheck();

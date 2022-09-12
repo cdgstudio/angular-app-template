@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WeatherWidgetEditComponent } from './components/weather-widget-edit/weather-widget-edit.component';
-import { WIDGET_EDIT_COMPONENT } from '../widget-edit';
+import { EDITABLE } from '../widget-edit';
+import { ModalModule } from '../../../../../shared/modal';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [WeatherWidgetEditComponent],
-  imports: [CommonModule],
+  imports: [CommonModule, ModalModule, ReactiveFormsModule],
   exports: [WeatherWidgetEditComponent],
   providers: [
     {
-      provide: WIDGET_EDIT_COMPONENT,
+      provide: EDITABLE,
       useValue: WeatherWidgetEditComponent,
     },
   ],

@@ -6,4 +6,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./dashboard.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardPage {}
+export class DashboardPage {
+  widgets: number[] = [0];
+
+  addNewWidget() {
+    this.widgets.push(this.widgets.length);
+  }
+}
