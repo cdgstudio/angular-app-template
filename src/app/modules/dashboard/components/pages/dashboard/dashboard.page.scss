@@ -15,10 +15,11 @@
   background: transparent;
   border: 1px dashed #000;
 
+  min-height: 10rem;
+
   > svg {
     width: 3rem;
     height: auto;
-    opacity: 0.5;
   }
 }
 
