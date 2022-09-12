@@ -1,4 +1,4 @@
-<form id="form" app-modal [formGroup]="form" (ngSubmit)="update()">
+<form id="form" app-modal [formGroup]="form" (ngSubmit)="update()" cdkTrapFocus cdkTrapFocusAutoCapture>
   <app-modal-header>
     <h2 app-modal-title>Edit weather widget</h2>
   </app-modal-header>
@@ -6,7 +6,7 @@
   <app-modal-body>
     <div>
       <label for="city">City</label>
-      <input id="city" type="text" formControlName="city" autocomplete="off" />
+      <input id="city" type="text" formControlName="city" autocomplete="off" cdkFocusInitial />
     </div>
   </app-modal-body>
 

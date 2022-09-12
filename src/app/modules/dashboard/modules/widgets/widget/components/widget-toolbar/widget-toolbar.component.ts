@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { finalize, switchMap } from 'rxjs';
 import { RELOADABLE, Reloadable } from '../../../reloadable-widget';
-import { EDITABLE, Editable, EditableWidgetForm, EDIT_FORM } from '../../../widget-edit';
+import { EDITABLE, Editable, EditableWidgetForm, EditableWidgetFormImport, EDIT_FORM } from '../../../widget-edit';
 
 const loadedModules = new Map<Type<EditableWidgetForm>, NgModuleRef<unknown>>();
 
@@ -36,7 +36,7 @@ export class WidgetToolbarComponent {
     @Optional()
     @Host()
     @Inject(EDIT_FORM)
-    public getEditComponentModule: () => Promise<Type<EditableWidgetForm>> | null,
+    public getEditComponentModule: EditableWidgetFormImport | null,
   ) {}
 
   protected isReloading = false;
@@ -60,7 +60,7 @@ export class WidgetToolbarComponent {
   async edit() {
     this.isReloading = true;
 
-    const moduleSource = await this.getEditComponentModule()!;
+    const moduleSource = await this.getEditComponentModule!();
 
     if (loadedModules.has(moduleSource) === false) {
       const factory = await this.compiler.compileModuleAsync(moduleSource);
