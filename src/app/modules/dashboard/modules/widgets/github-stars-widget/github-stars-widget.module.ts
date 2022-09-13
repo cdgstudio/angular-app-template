@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GithubStarsWidgetComponent } from './components/github-stars-widget/github-stars-widget.component';
+import { GithubStarsWidget } from './components/github-stars-widget/github-stars.widget';
 import { WidgetModule } from '../widget';
 
 @NgModule({
-  declarations: [GithubStarsWidgetComponent],
+  declarations: [GithubStarsWidget],
   imports: [CommonModule, WidgetModule],
-  exports: [GithubStarsWidgetComponent],
+  exports: [GithubStarsWidget],
 })
 export class GithubStarsWidgetModule {}

@@ -6,11 +6,11 @@ import { EditableWidgetForm } from '../../../widget-edit';
 
 @Component({
   selector: 'app-weather-widget-edit',
-  templateUrl: './weather-widget-edit.component.html',
-  styleUrls: ['./weather-widget-edit.component.scss'],
+  templateUrl: './weather.widget-edit.html',
+  styleUrls: ['./weather.widget-edit.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WeatherWidgetEditComponent implements EditableWidgetForm, OnDestroy {
+export class WeatherWidgetEdit implements EditableWidgetForm, OnDestroy {
   form = new FormGroup({
     city: new FormControl('', {
       nonNullable: true,

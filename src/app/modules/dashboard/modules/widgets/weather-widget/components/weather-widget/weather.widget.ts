@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
-import { Reloadable, RELOADABLE } from '../../../reloadable-widget';
-import { Editable, EDITABLE, EDIT_FORM } from '../../../widget-edit';
+import { ReloadableWidget, RELOADABLE_WIDGET } from '../../../reloadable-widget';
+import { EditableWidget, EDITABLE_WIDGET, EDIT_FORM } from '../../../widget-edit';
 import { OpenWeather } from '../../services/open-weather.models';
 import { OpenWeatherService } from '../../services/open-weather.service';
 
 @Component({
   selector: 'app-weather-widget',
-  templateUrl: './weather-widget.component.html',
-  styleUrls: ['./weather-widget.component.scss'],
+  templateUrl: './weather.widget.html',
+  styleUrls: ['./weather.widget.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
-    { provide: RELOADABLE, useExisting: WeatherWidgetComponent },
-    { provide: EDITABLE, useExisting: WeatherWidgetComponent },
+    { provide: RELOADABLE_WIDGET, useExisting: WeatherWidget },
+    { provide: EDITABLE_WIDGET, useExisting: WeatherWidget },
     {
       provide: EDIT_FORM,
       useValue: () =>
@@ -20,7 +20,7 @@ import { OpenWeatherService } from '../../services/open-weather.service';
     },
   ],
 })
-export class WeatherWidgetComponent implements OnInit, Reloadable, Editable {
+export class WeatherWidget implements OnInit, ReloadableWidget, EditableWidget {
   protected city = 'Warsaw';
   protected lastResponse?: OpenWeather;
 

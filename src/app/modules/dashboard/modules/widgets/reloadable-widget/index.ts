@@ -1,2 +1,2 @@
-export { Reloadable } from './models';
-export { RELOADABLE } from './tokens';
+export { ReloadableWidget } from './models';
+export { RELOADABLE_WIDGET } from './tokens';

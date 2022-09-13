@@ -3,8 +3,8 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
 import { finalize, switchMap } from 'rxjs';
 import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
-import { RELOADABLE, Reloadable } from '../../../reloadable-widget';
-import { EDITABLE, Editable, EditableWidgetFormImport, EDIT_FORM } from '../../../widget-edit';
+import { ReloadableWidget, RELOADABLE_WIDGET } from '../../../reloadable-widget';
+import { EDITABLE_WIDGET, EditableWidget, EditableWidgetFormImport, EDIT_FORM } from '../../../widget-edit';
 
 @Component({
   selector: 'app-widget-toolbar',
@@ -18,8 +18,8 @@ export class WidgetToolbarComponent {
     private overlay: Overlay,
     private moduleLoaderService: ModuleLoaderService,
 
-    @Optional() @Host() @Inject(RELOADABLE) public reloadableWidget: Reloadable | null,
-    @Optional() @Host() @Inject(EDITABLE) private editableWidget: Editable | null,
+    @Optional() @Host() @Inject(RELOADABLE_WIDGET) public reloadableWidget: ReloadableWidget | null,
+    @Optional() @Host() @Inject(EDITABLE_WIDGET) private editableWidget: EditableWidget | null,
     @Optional()
     @Host()
     @Inject(EDIT_FORM)
@@ -48,7 +48,7 @@ export class WidgetToolbarComponent {
     this.isReloading = true;
 
     const moduleRef = await this.moduleLoaderService.loadModuleAsync(this.moduleSourceImport!);
-    const EditComponent = moduleRef.injector.get(EDITABLE);
+    const EditComponent = moduleRef.injector.get(EDITABLE_WIDGET);
 
     const overlayRef = this.overlay.create({
       positionStrategy: new GlobalPositionStrategy().centerHorizontally().centerVertically(),
