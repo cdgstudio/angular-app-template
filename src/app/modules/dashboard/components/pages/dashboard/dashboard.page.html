@@ -1,9 +1,6 @@
 <div class="dashboard">
   <ng-container *ngFor="let widget of widgets$ | async">
-    <ng-container [ngSwitch]="widget.type">
-      <app-weather-widget *ngSwitchCase="'weather'"></app-weather-widget>
-      <app-github-stars-widget *ngSwitchCase="'github-stars'"></app-github-stars-widget>
-    </ng-container>
+    <ng-container [appWidgetLoader]="widget"></ng-container>
   </ng-container>
 
   <button (click)="addNewWidget()" class="add-new-widget">

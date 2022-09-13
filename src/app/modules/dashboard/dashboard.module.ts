@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardPage } from './components/pages/dashboard/dashboard.page';
 import { RouterModule, Routes } from '@angular/router';
-import { WidgetModule } from './modules/widgets/widget';
-import { WeatherWidgetModule } from './modules/widgets/weather-widget';
-import { GithubStarsWidgetModule } from './modules/widgets/github-stars-widget';
+import { WidgetLoaderDirective } from './directives/widget-loader.directive';
 
 const routes: Routes = [{ path: '', component: DashboardPage }];
 
 @NgModule({
-  declarations: [DashboardPage],
-  imports: [CommonModule, RouterModule.forChild(routes), WidgetModule, WeatherWidgetModule, GithubStarsWidgetModule],
+  declarations: [DashboardPage, WidgetLoaderDirective],
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
 export class DashboardModule {}
