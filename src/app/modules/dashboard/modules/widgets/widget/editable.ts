@@ -1,4 +1,4 @@
-import { InjectionToken, NgModuleRef, Type } from '@angular/core';
+import { Type, InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface EditableWidgetForm<T = unknown> {

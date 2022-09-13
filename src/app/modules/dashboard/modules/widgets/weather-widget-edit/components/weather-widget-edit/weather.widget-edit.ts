@@ -2,7 +2,7 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { EditableWidgetForm } from '../../../widget-edit';
+import { EditableWidgetForm } from '../../../widget';
 
 @Component({
   selector: 'app-weather-widget-edit',

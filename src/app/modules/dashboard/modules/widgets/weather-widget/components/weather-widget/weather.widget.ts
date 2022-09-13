@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
-import { ReloadableWidget, RELOADABLE_WIDGET } from '../../../reloadable-widget';
-import { EditableWidget, EDITABLE_WIDGET, EDIT_FORM } from '../../../widget-edit';
+import { RELOADABLE_WIDGET, EDITABLE_WIDGET, EDIT_FORM, ReloadableWidget, EditableWidget } from '../../../widget';
 import { OpenWeather } from '../../services/open-weather.models';
 import { OpenWeatherService } from '../../services/open-weather.service';
 

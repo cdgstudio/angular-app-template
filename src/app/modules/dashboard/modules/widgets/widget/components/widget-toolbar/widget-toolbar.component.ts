@@ -3,8 +3,8 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
 import { finalize, switchMap } from 'rxjs';
 import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
-import { ReloadableWidget, RELOADABLE_WIDGET } from '../../../reloadable-widget';
-import { EDITABLE_WIDGET, EditableWidget, EditableWidgetFormImport, EDIT_FORM } from '../../../widget-edit';
+import { EDITABLE_WIDGET, EditableWidget, EDIT_FORM, EditableWidgetFormImport } from '../../editable';
+import { RELOADABLE_WIDGET, ReloadableWidget } from '../../reloadable';
 
 @Component({
   selector: 'app-widget-toolbar',
