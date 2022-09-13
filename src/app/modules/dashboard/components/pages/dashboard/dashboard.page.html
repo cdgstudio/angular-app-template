@@ -1,9 +1,10 @@
 <div class="dashboard">
-  <ng-container *ngFor="let _ of widgets">
-    <app-weather-widget></app-weather-widget>
+  <ng-container *ngFor="let widget of widgets$ | async">
+    <ng-container [ngSwitch]="widget.type">
+      <app-weather-widget *ngSwitchCase="'weather'"></app-weather-widget>
+      <app-github-stars-widget *ngSwitchCase="'github-stars'"></app-github-stars-widget>
+    </ng-container>
   </ng-container>
-
-  <app-github-stars-widget></app-github-stars-widget>
 
   <button (click)="addNewWidget()" class="add-new-widget">
     <!-- prettier-ignore -->

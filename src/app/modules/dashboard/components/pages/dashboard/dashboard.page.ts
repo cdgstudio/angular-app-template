@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DashboardStateService } from '../../../service/dashboard-state.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +8,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPage {
-  widgets: number[] = [0];
+  widgets$ = this.dashboardStateService.state$;
+
+  constructor(private dashboardStateService: DashboardStateService) {}
 
   addNewWidget() {
-    this.widgets.push(this.widgets.length);
+    this.dashboardStateService.addRandomWidget().subscribe();
   }
 }
