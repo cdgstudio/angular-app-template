@@ -15,8 +15,7 @@ import { OpenWeatherService } from '../../services/open-weather.service';
     { provide: EDITABLE_WIDGET, useExisting: WeatherWidget },
     {
       provide: EDIT_FORM,
-      useValue: () =>
-        import('../../../weather-widget-edit/weather-widget-edit.module').then((m) => m.WeatherWidgetEditModule),
+      useValue: () => import('../../../weather-widget-edit').then((m) => m.WeatherWidgetEditModule),
     },
   ],
 })
