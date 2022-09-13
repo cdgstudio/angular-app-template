@@ -1,22 +1,10 @@
 import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Compiler,
-  Component,
-  Host,
-  Inject,
-  Injector,
-  NgModuleRef,
-  Optional,
-  Type,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
 import { finalize, switchMap } from 'rxjs';
+import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
 import { RELOADABLE, Reloadable } from '../../../reloadable-widget';
-import { EDITABLE, Editable, EditableWidgetForm, EditableWidgetFormImport, EDIT_FORM } from '../../../widget-edit';
-
-const loadedModules = new Map<Type<EditableWidgetForm>, NgModuleRef<unknown>>();
+import { EDITABLE, Editable, EditableWidgetFormImport, EDIT_FORM } from '../../../widget-edit';
 
 @Component({
   selector: 'app-widget-toolbar',
@@ -27,16 +15,15 @@ const loadedModules = new Map<Type<EditableWidgetForm>, NgModuleRef<unknown>>();
 export class WidgetToolbarComponent {
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private compiler: Compiler,
-    private injector: Injector,
     private overlay: Overlay,
+    private moduleLoaderService: ModuleLoaderService,
 
     @Optional() @Host() @Inject(RELOADABLE) public reloadableWidget: Reloadable | null,
     @Optional() @Host() @Inject(EDITABLE) private editableWidget: Editable | null,
     @Optional()
     @Host()
     @Inject(EDIT_FORM)
-    public getEditComponentModule: EditableWidgetFormImport | null,
+    public moduleSourceImport: EditableWidgetFormImport | null,
   ) {}
 
   protected isReloading = false;
@@ -60,15 +47,7 @@ export class WidgetToolbarComponent {
   async edit() {
     this.isReloading = true;
 
-    const moduleSource = await this.getEditComponentModule!();
-
-    if (loadedModules.has(moduleSource) === false) {
-      const factory = await this.compiler.compileModuleAsync(moduleSource);
-      const module = factory.create(this.injector);
-      loadedModules.set(moduleSource, module);
-    }
-
-    const moduleRef = loadedModules.get(moduleSource)!;
+    const moduleRef = await this.moduleLoaderService.loadModuleAsync(this.moduleSourceImport!);
     const EditComponent = moduleRef.injector.get(EDITABLE);
 
     const overlayRef = this.overlay.create({
@@ -77,7 +56,6 @@ export class WidgetToolbarComponent {
     });
 
     const widgetInjector = Injector.create({
-      parent: this.injector,
       providers: [
         {
           provide: OverlayRef,
