@@ -1,8 +1,10 @@
-import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
-
-export const RELOADABLE_WIDGET = new InjectionToken<any>('Widget with reload functionality');
+import { Widget } from './widget';
 
 export interface ReloadableWidget {
   reload(): Observable<void>;
+}
+
+export function isReloadableWidget(widget: Widget): widget is ReloadableWidget {
+  return 'reload' in widget;
 }

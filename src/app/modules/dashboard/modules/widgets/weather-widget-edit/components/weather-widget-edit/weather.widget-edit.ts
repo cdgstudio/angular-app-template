@@ -1,5 +1,5 @@
 import { OverlayRef } from '@angular/cdk/overlay';
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { EditableWidgetForm } from '../../../widget';
@@ -19,6 +19,7 @@ export class WeatherWidgetEdit implements EditableWidgetForm, OnDestroy {
   });
 
   private newData$ = new Subject<any>();
+
   constructor(private overlayRef: OverlayRef) {}
 
   getNewData(): Observable<unknown> {

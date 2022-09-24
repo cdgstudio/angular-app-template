@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { WeatherWidgetEdit } from './components/weather-widget-edit/weather.widget-edit';
-import { ModalModule } from '../../../../../shared/modal';
-import { ReactiveFormsModule } from '@angular/forms';
 import { A11yModule } from '@angular/cdk/a11y';
-import { EDITABLE_WIDGET } from '../widget';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ModalModule } from '../../../../../shared/modal';
+import { EDIT_WIDGET_COMPONENT } from '../widget';
+import { WeatherWidgetEdit } from './components/weather-widget-edit/weather.widget-edit';
 
 @NgModule({
   declarations: [WeatherWidgetEdit],
@@ -12,7 +12,7 @@ import { EDITABLE_WIDGET } from '../widget';
   exports: [WeatherWidgetEdit],
   providers: [
     {
-      provide: EDITABLE_WIDGET,
+      provide: EDIT_WIDGET_COMPONENT,
       useValue: WeatherWidgetEdit,
     },
   ],

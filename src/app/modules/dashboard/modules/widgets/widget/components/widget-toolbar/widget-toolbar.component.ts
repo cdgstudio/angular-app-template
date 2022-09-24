@@ -1,10 +1,12 @@
 import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
-import { finalize, switchMap } from 'rxjs';
+import { combineLatest, finalize, forkJoin, Observable, switchMap } from 'rxjs';
 import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
-import { EDITABLE_WIDGET, EditableWidget, EDIT_FORM, EditableWidgetFormImport } from '../../editable';
-import { RELOADABLE_WIDGET, ReloadableWidget } from '../../reloadable';
+import { DashboardStateService } from '../../../../../service/dashboard-state.service';
+import { EditableWidgetFormImport, EDIT_WIDGET_COMPONENT, EDIT_WIDGET_MODULE, isStatefullWidget } from '../../editable';
+import { isReloadableWidget } from '../../reloadable';
+import { Widget, WIDGET } from '../../widget';
 
 @Component({
   selector: 'app-widget-toolbar',
@@ -13,28 +15,32 @@ import { RELOADABLE_WIDGET, ReloadableWidget } from '../../reloadable';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetToolbarComponent {
+  reloadableWidget = isReloadableWidget(this.widget);
+
   constructor(
     private changeDetector: ChangeDetectorRef,
     private overlay: Overlay,
     private moduleLoaderService: ModuleLoaderService,
 
-    @Optional() @Host() @Inject(RELOADABLE_WIDGET) public reloadableWidget: ReloadableWidget | null,
-    @Optional() @Host() @Inject(EDITABLE_WIDGET) private editableWidget: EditableWidget | null,
+    @Host() @Inject(WIDGET) private widget: Widget,
     @Optional()
     @Host()
-    @Inject(EDIT_FORM)
+    @Inject(EDIT_WIDGET_MODULE)
     public moduleSourceImport: EditableWidgetFormImport | null,
+    private dashboardStateService: DashboardStateService, // @todo: fix import place
   ) {}
 
   protected isReloading = false;
 
   reload() {
-    if (this.reloadableWidget !== null && this.isReloading === true) {
+    const widget = this.widget;
+    if (!isReloadableWidget(widget) || this.isReloading) {
       return;
     }
 
     this.isReloading = true;
-    this.reloadableWidget!.reload()
+    widget
+      .reload()
       .pipe(
         finalize(() => {
           this.isReloading = false;
@@ -45,10 +51,15 @@ export class WidgetToolbarComponent {
   }
 
   async edit() {
+    const widget = this.widget;
+    if (!isStatefullWidget(widget)) {
+      return;
+    }
+
     this.isReloading = true;
 
     const moduleRef = await this.moduleLoaderService.loadModuleAsync(this.moduleSourceImport!);
-    const EditComponent = moduleRef.injector.get(EDITABLE_WIDGET);
+    const EditWidgetFormComponent = moduleRef.injector.get(EDIT_WIDGET_COMPONENT); // @todo: fix type
 
     const overlayRef = this.overlay.create({
       positionStrategy: new GlobalPositionStrategy().centerHorizontally().centerVertically(),
@@ -63,13 +74,14 @@ export class WidgetToolbarComponent {
         },
       ],
     });
-    const portal = new ComponentPortal(EditComponent, null, widgetInjector);
+    const portal = new ComponentPortal(EditWidgetFormComponent, null, widgetInjector);
     const ref = overlayRef.attach(portal);
 
-    ref.instance
-      .getNewData()
+    forkJoin([ref.instance.getNewData() as Observable<any>, widget.getState()])
       .pipe(
-        switchMap((newData) => this.editableWidget!.setNewData(newData)),
+        switchMap(([newState, oldState]) =>
+          combineLatest([this.dashboardStateService.updateWidgetState(widget, newState), widget.setState(newState)]),
+        ),
         finalize(() => {
           this.isReloading = false;
           this.changeDetector.detectChanges();

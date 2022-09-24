@@ -5,11 +5,16 @@ export interface EditableWidgetForm<T = unknown> {
   getNewData(): Observable<T>;
 }
 
-export interface EditableWidget<T = unknown> {
-  setNewData(value: T): Observable<void>;
+export interface StatefullWidget<T = unknown> {
+  setState(value: T): Observable<void>;
+  getState(): Observable<T>;
 }
 
 export type EditableWidgetFormImport = () => Promise<Type<unknown>>;
 
-export const EDIT_FORM = new InjectionToken<EditableWidgetForm>('Editable widget');
-export const EDITABLE_WIDGET = new InjectionToken<Type<EditableWidgetForm>>('Component with edit options');
+export const EDIT_WIDGET_MODULE = new InjectionToken<Type<EditableWidgetForm>>('Module path');
+export const EDIT_WIDGET_COMPONENT = new InjectionToken<Type<any>>('Component to display edit form');
+
+export function isStatefullWidget(obj: any): obj is StatefullWidget {
+  return !!(obj as StatefullWidget).getState && !!(obj as StatefullWidget).setState;
+}

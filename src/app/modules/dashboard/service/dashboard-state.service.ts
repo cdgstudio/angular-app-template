@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, map, Observable, tap, timer } from 'rxjs';
+import { BehaviorSubject, defer, map, Observable, take, tap, timer } from 'rxjs';
 
 interface WidgetState {
   type: 'weather' | 'github-stars';
+  data?: any;
 }
 
 @Injectable({
@@ -30,8 +31,24 @@ export class DashboardStateService {
 
   addRandomWidget(): Observable<void> {
     const currentState = this.state$.getValue();
-    const newState = [...currentState, { type: Math.random() < 0.5 ? 'weather' : 'github-stars' }] as WidgetState[];
+    const type = Math.random() < 0.5 ? 'weather' : ('github-stars' as const);
+    const newState = [
+      ...currentState,
+      { type, data: type === 'weather' ? { city: 'Warsaw' } : void 0 },
+    ] as WidgetState[];
     return this.saveState(newState).pipe(tap(() => this.state$.next(newState)));
+  }
+
+  updateWidgetState(widget: any, newData: any): Observable<void> {
+    return this.state$.pipe(
+      take(1),
+      tap((currentState) => {
+        const newState = currentState.map((item) => (item === widget ? newData : item));
+        this.saveState(newState).subscribe();
+        this.state$.next(newState);
+      }),
+      map(() => void 0),
+    );
   }
 
   private isValidState(state: any): state is WidgetState[] {
