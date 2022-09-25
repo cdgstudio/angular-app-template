@@ -21,6 +21,7 @@ export class WidgetToolbarComponent {
     private changeDetector: ChangeDetectorRef,
     private overlay: Overlay,
     private moduleLoaderService: ModuleLoaderService,
+    @Inject('ID') private id: string,
 
     @Host() @Inject(WIDGET) private widget: Widget,
     @Optional()
@@ -48,6 +49,13 @@ export class WidgetToolbarComponent {
         }),
       )
       .subscribe();
+  }
+
+  remove() {
+    // @todo: add not blocking confirm
+    if (confirm('Are you sure to remove widget?')) {
+      this.dashboardStateService.removeWidget(this.id).subscribe();
+    }
   }
 
   async edit() {
@@ -80,7 +88,7 @@ export class WidgetToolbarComponent {
     forkJoin([ref.instance.getNewData() as Observable<any>, widget.getState()])
       .pipe(
         switchMap(([newState, oldState]) =>
-          combineLatest([this.dashboardStateService.updateWidgetState(widget, newState), widget.setState(newState)]),
+          combineLatest([this.dashboardStateService.updateWidgetState(this.id, newState), widget.setState(newState)]),
         ),
         finalize(() => {
           this.isReloading = false;

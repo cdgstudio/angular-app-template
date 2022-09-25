@@ -1,6 +1,7 @@
-import { Directive, Input, ViewContainerRef } from '@angular/core';
+import { Directive, Injector, Input, ViewContainerRef } from '@angular/core';
 import { ModuleLoaderService } from '../../../shared/module-loader';
-import { StatefullWidget, EDIT_WIDGET_MODULE, WIDGET, WIDGET_COMPONENT } from '../modules/widgets/widget';
+import { EDIT_WIDGET_MODULE, StatefullWidget, WIDGET, WIDGET_COMPONENT } from '../modules/widgets/widget';
+import { WidgetState } from '../service/dashboard-state.service';
 
 const WIDGET_LOADERS = [
   {
@@ -17,7 +18,7 @@ const WIDGET_LOADERS = [
   selector: '[appWidgetLoader]',
 })
 export class WidgetLoaderDirective {
-  @Input() set appWidgetLoader(widgetData: any) {
+  @Input() set appWidgetLoader(widgetData: WidgetState) {
     const loader = WIDGET_LOADERS.find((loader) => loader.type === widgetData.type);
 
     if (loader === void 0) {
@@ -26,9 +27,20 @@ export class WidgetLoaderDirective {
 
     this.moduleLoaderService.loadModuleAsync(loader.loadWidgetModule).then((moduleRef) => {
       const Component = moduleRef.injector.get(WIDGET_COMPONENT);
+
+      const componentInjector = Injector.create({
+        parent: moduleRef.injector,
+        providers: [
+          {
+            provide: 'ID', // @todo: provide ID as injector token or class reference
+            useValue: widgetData.id,
+          },
+        ],
+      });
+
       const ref = this.viewContainerRef.createComponent(Component, {
         ngModuleRef: moduleRef,
-        injector: moduleRef.injector,
+        injector: componentInjector,
       });
 
       const edit = ref.injector.get(EDIT_WIDGET_MODULE, null);
@@ -40,5 +52,6 @@ export class WidgetLoaderDirective {
       ref.changeDetectorRef.markForCheck();
     });
   }
+
   constructor(private viewContainerRef: ViewContainerRef, private moduleLoaderService: ModuleLoaderService) {}
 }

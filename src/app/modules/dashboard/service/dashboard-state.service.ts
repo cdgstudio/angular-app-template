@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, defer, map, Observable, take, tap, timer } from 'rxjs';
+import { BehaviorSubject, defer, map, Observable, switchMap, take, tap, timer } from 'rxjs';
 
-interface WidgetState {
-  type: 'weather' | 'github-stars';
-  data?: any;
+export interface WidgetState<T = undefined> {
+  readonly type: 'weather' | 'github-stars';
+  readonly id: string;
+  data: T;
 }
 
 @Injectable({
@@ -31,27 +32,48 @@ export class DashboardStateService {
 
   addRandomWidget(): Observable<void> {
     const currentState = this.state$.getValue();
-    const type = Math.random() < 0.5 ? 'weather' : ('github-stars' as const);
+    const type = Math.random() < 0.75 ? 'weather' : ('github-stars' as const);
     const newState = [
       ...currentState,
-      { type, data: type === 'weather' ? { city: 'Warsaw' } : void 0 },
+      { id: this.randomString(), type, data: type === 'weather' ? { city: 'Warsaw' } : void 0 },
     ] as WidgetState[];
     return this.saveState(newState).pipe(tap(() => this.state$.next(newState)));
   }
 
-  updateWidgetState(widget: any, newData: any): Observable<void> {
+  removeWidget(id: string): Observable<void> {
     return this.state$.pipe(
       take(1),
-      tap((currentState) => {
-        const newState = currentState.map((item) => (item === widget ? newData : item));
-        this.saveState(newState).subscribe();
-        this.state$.next(newState);
-      }),
+      map((oldState) => oldState.filter((state) => state.id !== id)),
+      tap((newState) => this.state$.next(newState)),
+      switchMap((newState) => this.saveState(newState)),
+    );
+  }
+
+  updateWidgetState(id: string, newData: unknown): Observable<void> {
+    return this.state$.pipe(
+      take(1),
+      map((oldState) =>
+        oldState.map((item) =>
+          item.id === id
+            ? {
+                id: id,
+                type: item.type,
+                data: newData,
+              }
+            : item,
+        ),
+      ),
+      tap((newState) => this.state$.next(newState as any)),
+      switchMap((newState) => this.saveState(newState)),
       map(() => void 0),
     );
   }
 
   private isValidState(state: any): state is WidgetState[] {
-    return Array.isArray(state) && state.some((st) => 'type' in st);
+    return Array.isArray(state) && state.every((st) => !!(st as WidgetState).id && !!(st as WidgetState).type);
+  }
+
+  private randomString(): string {
+    return (Math.random() + 1).toString(36).substring(7);
   }
 }

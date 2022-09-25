@@ -27,7 +27,6 @@ export class WeatherWidget implements OnInit, Widget, ReloadableWidget, Stateful
   constructor(private changeDetector: ChangeDetectorRef, private openWeatherService: OpenWeatherService) {}
 
   ngOnInit() {
-    this.changeDetector.markForCheck();
     this.reload().subscribe();
   }
 

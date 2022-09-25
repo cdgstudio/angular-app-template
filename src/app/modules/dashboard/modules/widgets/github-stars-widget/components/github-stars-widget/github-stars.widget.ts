@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { WIDGET } from '../../../widget';
+import { Widget, WIDGET } from '../../../widget';
 import { GithubService } from '../../services/github.service';
 
 @Component({
@@ -14,7 +14,7 @@ import { GithubService } from '../../services/github.service';
     },
   ],
 })
-export class GithubStarsWidget {
+export class GithubStarsWidget implements Widget {
   stars$ = this.githubService.getProjectStars('angular', 'angular');
   constructor(private githubService: GithubService) {}
 }
