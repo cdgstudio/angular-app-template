@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DashboardStateService } from '../../../service/dashboard-state.service';
+import { DashboardStateService, WidgetState } from '../../../service/dashboard-state.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,5 +14,9 @@ export class DashboardPage {
 
   addNewWidget() {
     this.dashboardStateService.addRandomWidget().subscribe();
+  }
+
+  trackById(index: number, widget: WidgetState) {
+    return widget.id;
   }
 }

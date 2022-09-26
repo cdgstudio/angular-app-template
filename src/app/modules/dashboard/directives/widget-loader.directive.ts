@@ -18,7 +18,15 @@ const WIDGET_LOADERS = [
   selector: '[appWidgetLoader]',
 })
 export class WidgetLoaderDirective {
+  private prevValue?: WidgetState;
+
+  // @todo: make input more reactive
   @Input() set appWidgetLoader(widgetData: WidgetState) {
+    if (this.prevValue?.id === widgetData.id) {
+      return;
+    }
+    this.prevValue = widgetData;
+
     const loader = WIDGET_LOADERS.find((loader) => loader.type === widgetData.type);
 
     if (loader === void 0) {
@@ -33,7 +41,8 @@ export class WidgetLoaderDirective {
         providers: [{ provide: WidgetId, useValue: widgetData.id }],
       });
 
-      const ref = this.viewContainerRef.createComponent(Component, {
+      this.viewContainer.clear();
+      const ref = this.viewContainer.createComponent(Component, {
         ngModuleRef: moduleRef,
         injector: componentInjector,
       });
@@ -48,5 +57,5 @@ export class WidgetLoaderDirective {
     });
   }
 
-  constructor(private viewContainerRef: ViewContainerRef, private moduleLoaderService: ModuleLoaderService) {}
+  constructor(private viewContainer: ViewContainerRef, private moduleLoaderService: ModuleLoaderService) {}
 }

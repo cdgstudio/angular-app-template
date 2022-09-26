@@ -1,5 +1,5 @@
 <div class="dashboard">
-  <ng-container *ngFor="let widget of widgets$ | async">
+  <ng-container *ngFor="let widget of widgets$ | async; trackBy: trackById">
     <ng-container [appWidgetLoader]="widget"></ng-container>
   </ng-container>
 

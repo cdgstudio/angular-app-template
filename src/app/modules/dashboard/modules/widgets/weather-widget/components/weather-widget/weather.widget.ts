@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { map, Observable, of, tap } from 'rxjs';
-import { StatefullWidget, EDIT_WIDGET_MODULE, ReloadableWidget, Widget, WIDGET } from '../../../widget';
+import { EDIT_WIDGET_MODULE, ReloadableWidget, StatefullWidget, Widget, WIDGET } from '../../../widget';
 import { OpenWeather } from '../../services/open-weather.models';
 import { OpenWeatherService } from '../../services/open-weather.service';
 
@@ -20,15 +20,11 @@ import { OpenWeatherService } from '../../services/open-weather.service';
     },
   ],
 })
-export class WeatherWidget implements OnInit, Widget, ReloadableWidget, StatefullWidget<any> {
+export class WeatherWidget implements Widget, ReloadableWidget, StatefullWidget<any> {
   protected city = 'Warsaw';
   protected lastResponse?: OpenWeather;
 
   constructor(private changeDetector: ChangeDetectorRef, private openWeatherService: OpenWeatherService) {}
-
-  ngOnInit() {
-    this.reload().subscribe();
-  }
 
   reload(): Observable<void> {
     return this.openWeatherService.getWeatherForCity(this.city).pipe(
