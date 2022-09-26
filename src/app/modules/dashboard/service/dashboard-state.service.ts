@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, defer, map, Observable, switchMap, take, tap, timer } from 'rxjs';
+import { WidgetId } from '../modules/widgets/widget';
 
 export interface WidgetState<T = undefined> {
   readonly type: 'weather' | 'github-stars';
@@ -40,7 +41,7 @@ export class DashboardStateService {
     return this.saveState(newState).pipe(tap(() => this.state$.next(newState)));
   }
 
-  removeWidget(id: string): Observable<void> {
+  removeWidget(id: WidgetId): Observable<void> {
     return this.state$.pipe(
       take(1),
       map((oldState) => oldState.filter((state) => state.id !== id)),
@@ -49,7 +50,7 @@ export class DashboardStateService {
     );
   }
 
-  updateWidgetState(id: string, newData: unknown): Observable<void> {
+  updateWidgetState(id: WidgetId, newData: unknown): Observable<void> {
     return this.state$.pipe(
       take(1),
       map((oldState) =>

@@ -6,6 +6,7 @@ import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
 import { DashboardStateService } from '../../../../../service/dashboard-state.service';
 import { EditableWidgetFormImport, EDIT_WIDGET_COMPONENT, EDIT_WIDGET_MODULE, isStatefullWidget } from '../../editable';
 import { isReloadableWidget } from '../../reloadable';
+import { WidgetId } from '../../tokens';
 import { Widget, WIDGET } from '../../widget';
 
 @Component({
@@ -21,7 +22,7 @@ export class WidgetToolbarComponent {
     private changeDetector: ChangeDetectorRef,
     private overlay: Overlay,
     private moduleLoaderService: ModuleLoaderService,
-    @Inject('ID') private id: string,
+    private id: WidgetId,
 
     @Host() @Inject(WIDGET) private widget: Widget,
     @Optional()

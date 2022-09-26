@@ -3,3 +3,5 @@ export { WidgetToolbarComponent } from './components/widget-toolbar/widget-toolb
 export * from './editable';
 export * from './reloadable';
 export * from './widget';
+
+export { WidgetId } from './tokens';

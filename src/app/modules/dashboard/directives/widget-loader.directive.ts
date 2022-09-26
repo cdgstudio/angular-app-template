@@ -1,6 +1,6 @@
 import { Directive, Injector, Input, ViewContainerRef } from '@angular/core';
 import { ModuleLoaderService } from '../../../shared/module-loader';
-import { EDIT_WIDGET_MODULE, StatefullWidget, WIDGET, WIDGET_COMPONENT } from '../modules/widgets/widget';
+import { EDIT_WIDGET_MODULE, StatefullWidget, WIDGET, WidgetId, WIDGET_COMPONENT } from '../modules/widgets/widget';
 import { WidgetState } from '../service/dashboard-state.service';
 
 const WIDGET_LOADERS = [
@@ -30,12 +30,7 @@ export class WidgetLoaderDirective {
 
       const componentInjector = Injector.create({
         parent: moduleRef.injector,
-        providers: [
-          {
-            provide: 'ID', // @todo: provide ID as injector token or class reference
-            useValue: widgetData.id,
-          },
-        ],
+        providers: [{ provide: WidgetId, useValue: widgetData.id }],
       });
 
       const ref = this.viewContainerRef.createComponent(Component, {
