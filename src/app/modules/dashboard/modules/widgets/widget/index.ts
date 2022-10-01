@@ -4,4 +4,4 @@ export * from './editable';
 export * from './reloadable';
 export * from './widget';
 
-export { WidgetId } from './tokens';
+export { WidgetId, WidgetState } from './tokens';

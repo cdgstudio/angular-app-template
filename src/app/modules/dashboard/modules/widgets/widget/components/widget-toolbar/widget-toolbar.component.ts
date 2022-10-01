@@ -1,12 +1,12 @@
 import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
-import { combineLatest, finalize, forkJoin, Observable, switchMap } from 'rxjs';
+import { combineLatest, finalize, forkJoin, Observable, switchMap, lastValueFrom, tap } from 'rxjs';
 import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
 import { DashboardStateService } from '../../../../../service/dashboard-state.service';
 import { EditableWidgetFormImport, EDIT_WIDGET_COMPONENT, EDIT_WIDGET_MODULE, isStatefullWidget } from '../../editable';
 import { isReloadableWidget } from '../../reloadable';
-import { WidgetId } from '../../tokens';
+import { WidgetId, WidgetState } from '../../tokens';
 import { Widget, WIDGET } from '../../widget';
 
 @Component({
@@ -75,20 +75,27 @@ export class WidgetToolbarComponent {
       hasBackdrop: true,
     });
 
+    const currentState = await lastValueFrom(widget.getState()); // @todo: make is as observable
+
     const widgetInjector = Injector.create({
       providers: [
         {
           provide: OverlayRef,
           useValue: overlayRef,
         },
+        {
+          provide: WidgetState,
+          useValue: currentState,
+        },
       ],
     });
     const portal = new ComponentPortal(EditWidgetFormComponent, null, widgetInjector);
     const ref = overlayRef.attach(portal);
 
-    forkJoin([ref.instance.getNewData() as Observable<any>, widget.getState()])
+    ref.instance
+      .getNewData()
       .pipe(
-        switchMap(([newState, oldState]) =>
+        switchMap((newState) =>
           combineLatest([this.dashboardStateService.updateWidgetState(this.id, newState), widget.setState(newState)]),
         ),
         finalize(() => {
