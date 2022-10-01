@@ -1,7 +1,7 @@
 import { Directive, Injector, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { distinctUntilKeyChanged, filter, map, of, ReplaySubject, switchMap, tap } from 'rxjs';
 import { ModuleLoaderService } from '../../../shared/module-loader';
-import { EDIT_WIDGET_MODULE, StatefullWidget, WIDGET, WidgetId, WIDGET_COMPONENT } from '../modules/widgets/widget';
+import { isStatefullWidget, WidgetId, WIDGET_COMPONENT } from '../modules/widgets/widget';
 import { WidgetState } from '../service/dashboard-state.service';
 
 const WIDGET_LOADERS = [
@@ -39,23 +39,26 @@ export class WidgetLoaderDirective implements OnInit, OnDestroy {
             map((ngModuleRef) => [widgetData, ngModuleRef] as const),
           ),
         ),
-        tap(([widgetData, ngModuleRef]) => {
+        map(([widgetData, ngModuleRef]) => {
           const injector = Injector.create({
             parent: ngModuleRef.injector,
             providers: [{ provide: WidgetId, useValue: widgetData.id }],
           });
-          const Component = ngModuleRef.injector.get(WIDGET_COMPONENT);
+          const WidgetComponent = ngModuleRef.injector.get(WIDGET_COMPONENT);
+
           this.viewContainer.clear();
-          const ref = this.viewContainer.createComponent(Component, { ngModuleRef, injector });
+          const widgetRef = this.viewContainer.createComponent(WidgetComponent, { ngModuleRef, injector });
 
-          const EditComponent = ngModuleRef.injector.get(EDIT_WIDGET_MODULE, null);
-          if (EditComponent !== null) {
-            const editComponent = ngModuleRef.injector.get(WIDGET) as StatefullWidget; // @Todo: fix type
-            editComponent.setState(widgetData.data).subscribe();
-          }
-
-          ref.changeDetectorRef.markForCheck();
+          return [widgetData, widgetRef] as const;
         }),
+        switchMap(([widgetData, componentRef]) => {
+          const widget = componentRef.instance;
+          if (isStatefullWidget(widget)) {
+            return widget.setState(widgetData.data).pipe(map(() => componentRef));
+          }
+          return of(componentRef);
+        }),
+        tap((componentRef) => componentRef.changeDetectorRef.markForCheck()),
       )
       .subscribe();
   }
