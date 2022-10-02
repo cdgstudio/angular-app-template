@@ -1,7 +1,20 @@
 <app-modal>
   <app-modal-header>
-    <ng-container app-modal-title> Title </ng-container>
+    <h2 app-modal-title>Select widget to add</h2>
   </app-modal-header>
-  <app-modal-body> body </app-modal-body>
-  <app-modal-footer> footer </app-modal-footer>
+  <app-modal-body>
+    <ul>
+      <li *ngFor="let widget of widgets">
+        <button (click)="addWidget(widget.type)">
+          <figure>
+            <img src="/assets/widgets/{{ widget.type }}.png" [alt]="widget.description" />
+            <figcaption>{{ widget.description }}</figcaption>
+          </figure>
+        </button>
+      </li>
+    </ul>
+  </app-modal-body>
+  <app-modal-footer>
+    <button appCloseModal>Cancel</button>
+  </app-modal-footer>
 </app-modal>
