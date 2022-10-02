@@ -1,7 +1,7 @@
 import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
-import { combineLatest, finalize, forkJoin, Observable, switchMap, lastValueFrom, tap } from 'rxjs';
+import { combineLatest, finalize, forkJoin, Observable, switchMap, lastValueFrom, tap, take } from 'rxjs';
 import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
 import { DashboardStateService } from '../../../../../service/dashboard-state.service';
 import { EditableWidgetFormImport, EDIT_WIDGET_COMPONENT, EDIT_WIDGET_MODULE, isStatefullWidget } from '../../editable';
@@ -75,7 +75,7 @@ export class WidgetToolbarComponent {
       hasBackdrop: true,
     });
 
-    const currentState = await lastValueFrom(widget.getState()); // @todo: make is as observable
+    const currentState = await lastValueFrom(widget.getState().pipe(take(1))); // @todo: make is as observable
 
     const widgetInjector = Injector.create({
       providers: [

@@ -1,5 +1,5 @@
 import { Directive, Injector, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
-import { distinctUntilKeyChanged, filter, map, of, ReplaySubject, switchMap, tap } from 'rxjs';
+import { defaultIfEmpty, distinctUntilKeyChanged, filter, map, of, ReplaySubject, switchMap, tap } from 'rxjs';
 import { ModuleLoaderService } from '../../../shared/module-loader';
 import { isStatefullWidget, WidgetId, WIDGET_COMPONENT } from '../modules/widgets/widget';
 import { WidgetState } from '../service/dashboard-state.service';
@@ -53,10 +53,13 @@ export class WidgetLoaderDirective implements OnInit, OnDestroy {
         }),
         switchMap(([widgetData, componentRef]) => {
           const widget = componentRef.instance;
-          if (isStatefullWidget(widget)) {
-            return widget.setState(widgetData.data).pipe(map(() => componentRef));
+          if (!isStatefullWidget(widget)) {
+            return of(componentRef);
           }
-          return of(componentRef);
+          return widget.setState(widgetData.data).pipe(
+            map(() => componentRef),
+            defaultIfEmpty(componentRef),
+          );
         }),
         tap((componentRef) => componentRef.changeDetectorRef.markForCheck()),
       )

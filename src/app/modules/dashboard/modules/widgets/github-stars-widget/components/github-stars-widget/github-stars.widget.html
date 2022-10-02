@@ -1,5 +1,9 @@
 <app-widget-toolbar>
-  <ng-container title>Angular stars</ng-container>
+  <ng-container title>
+    <ng-container *ngIf="state$ | async as state">
+      {{state.organization | titlecase}}/{{state.project | titlecase}} stars
+    </ng-container>
+  </ng-container>
 </app-widget-toolbar>
 
 <div class="content">

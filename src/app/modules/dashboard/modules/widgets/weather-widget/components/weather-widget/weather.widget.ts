@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { map, Observable, of, tap } from 'rxjs';
 import { EDIT_WIDGET_MODULE, ReloadableWidget, StatefullWidget, Widget, WIDGET } from '../../../widget';
+import { WeatherWidgetState } from '../../models/state.models';
 import { OpenWeather } from '../../services/open-weather.models';
 import { OpenWeatherService } from '../../services/open-weather.service';
 
@@ -20,7 +21,7 @@ import { OpenWeatherService } from '../../services/open-weather.service';
     },
   ],
 })
-export class WeatherWidget implements Widget, ReloadableWidget, StatefullWidget<any> {
+export class WeatherWidget implements Widget, ReloadableWidget, StatefullWidget<WeatherWidgetState> {
   protected city = 'Warsaw';
   protected lastResponse?: OpenWeather;
 
@@ -34,12 +35,16 @@ export class WeatherWidget implements Widget, ReloadableWidget, StatefullWidget<
     );
   }
 
-  getState(): Observable<any> {
-    return of({ city: this.city });
+  setState(value: WeatherWidgetState): Observable<void> {
+    if (value === void 0) {
+      this.city = 'Warsaw';
+      return this.reload();
+    }
+    this.city = value.city;
+    return this.reload();
   }
 
-  setState({ city }: any): Observable<void> {
-    this.city = city;
-    return this.reload();
+  getState(): Observable<WeatherWidgetState> {
+    return of({ city: this.city });
   }
 }

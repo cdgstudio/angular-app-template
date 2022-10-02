@@ -33,10 +33,12 @@ export class DashboardStateService {
 
   addRandomWidget(): Observable<void> {
     const currentState = this.state$.getValue();
-    const type = Math.random() < 0.75 ? 'weather' : ('github-stars' as const);
     const newState = [
       ...currentState,
-      { id: this.randomString(), type, data: type === 'weather' ? { city: 'Warsaw' } : void 0 },
+      {
+        id: this.randomString(),
+        type: Math.random() < 0.5 ? 'weather' : 'github-stars',
+      },
     ] as WidgetState[];
     return this.saveState(newState).pipe(tap(() => this.state$.next(newState)));
   }

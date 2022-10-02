@@ -7,7 +7,10 @@ export interface EditableWidgetForm<T = unknown> {
 }
 
 export interface StatefullWidget<T = unknown> {
-  setState(value: T): Observable<void>;
+  /**
+   * Empty `value` means no state
+   */
+  setState(value?: T | undefined): Observable<void>;
   getState(): Observable<T>;
 }
 

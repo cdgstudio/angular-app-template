@@ -1,0 +1,22 @@
+<app-modal cdkTrapFocus cdkTrapFocusAutoCapture>
+  <app-modal-header>
+    <h2 app-modal-title>Edit github stars widget</h2>
+  </app-modal-header>
+
+  <app-modal-body>
+    <form id="form" [formGroup]="form" (ngSubmit)="update()">
+      <div>
+        <label for="organization">Organization</label>
+        <input id="organization" type="text" formControlName="organization" autocomplete="off" cdkFocusInitial />
+      </div>
+      <div>
+        <label for="Project">Project</label>
+        <input id="Project" type="text" formControlName="project" autocomplete="off" />
+      </div>
+    </form>
+  </app-modal-body>
+
+  <app-modal-footer>
+    <button form="form" type="submit" [disabled]="!form.valid">Update</button>
+  </app-modal-footer>
+</app-modal>

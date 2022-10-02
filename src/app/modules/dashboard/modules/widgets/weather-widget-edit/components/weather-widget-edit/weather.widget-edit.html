@@ -1,4 +1,4 @@
-<form id="form" app-modal [formGroup]="form" (ngSubmit)="update()" cdkTrapFocus cdkTrapFocusAutoCapture>
+<form app-modal [formGroup]="form" (ngSubmit)="update()" cdkTrapFocus cdkTrapFocusAutoCapture>
   <app-modal-header>
     <h2 app-modal-title>Edit weather widget</h2>
   </app-modal-header>
@@ -11,6 +11,6 @@
   </app-modal-body>
 
   <app-modal-footer>
-    <button type="submit" form="form" [disabled]="!form.valid">Update</button>
+    <button type="submit" [disabled]="!form.valid">Update</button>
   </app-modal-footer>
 </form>

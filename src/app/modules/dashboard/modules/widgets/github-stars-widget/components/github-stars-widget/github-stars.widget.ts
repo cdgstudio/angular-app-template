@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Widget, WIDGET } from '../../../widget';
+import { defer, EMPTY, Observable, ReplaySubject, switchMap, take } from 'rxjs';
+import { EDIT_WIDGET_MODULE, StatefullWidget, Widget, WIDGET } from '../../../widget';
+import { GithubStarsWidgetState } from '../../models/state.models';
 import { GithubService } from '../../services/github.service';
 
 @Component({
@@ -12,9 +14,31 @@ import { GithubService } from '../../services/github.service';
       provide: WIDGET,
       useExisting: GithubStarsWidget,
     },
+    {
+      provide: EDIT_WIDGET_MODULE,
+      useValue: () => import('../../../github-stars-widget-edit').then((f) => f.GithubStarsWidgetEditModule),
+    },
   ],
 })
-export class GithubStarsWidget implements Widget {
-  stars$ = this.githubService.getProjectStars('angular', 'angular');
+export class GithubStarsWidget implements Widget, StatefullWidget<GithubStarsWidgetState> {
+  state$ = new ReplaySubject<GithubStarsWidgetState>(1);
+  stars$ = this.state$.pipe(
+    switchMap(({ organization, project }) => this.githubService.getProjectStars(organization, project)),
+  );
+
   constructor(private githubService: GithubService) {}
+
+  setState(value: GithubStarsWidgetState | undefined): Observable<void> {
+    return defer(() => {
+      if (value === void 0) {
+        this.state$.next({ organization: 'angular', project: 'angular' });
+      } else {
+        this.state$.next(value);
+      }
+      return EMPTY;
+    });
+  }
+  getState(): Observable<GithubStarsWidgetState> {
+    return this.state$;
+  }
 }
