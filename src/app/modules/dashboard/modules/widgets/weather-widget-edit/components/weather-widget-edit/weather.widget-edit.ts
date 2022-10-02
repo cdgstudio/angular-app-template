@@ -1,7 +1,7 @@
-import { OverlayRef } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
+import { ModalService } from '../../../../../../../shared/modal';
 import { EditableWidgetForm, WidgetState } from '../../../widget';
 
 @Component({
@@ -20,11 +20,7 @@ export class WeatherWidgetEdit implements EditableWidgetForm, OnDestroy {
 
   private newData$ = new Subject<any>();
 
-  constructor(
-    private overlayRef: OverlayRef,
-    @Inject(WidgetState)
-    private currentState: { city: string },
-  ) {}
+  constructor(private modalService: ModalService, @Inject(WidgetState) private currentState: { city: string }) {}
 
   getNewData(): Observable<unknown> {
     return this.newData$;
@@ -36,7 +32,7 @@ export class WeatherWidgetEdit implements EditableWidgetForm, OnDestroy {
   }
 
   close() {
-    this.overlayRef.detach();
+    this.modalService.closeModal();
   }
 
   ngOnDestroy(): void {

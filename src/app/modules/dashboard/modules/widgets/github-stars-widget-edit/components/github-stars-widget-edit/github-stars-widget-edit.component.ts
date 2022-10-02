@@ -2,6 +2,7 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
+import { ModalService } from '../../../../../../../shared/modal';
 import { GithubStarsWidgetState } from '../../../github-stars-widget';
 import { EditableWidgetForm, WidgetState } from '../../../widget';
 
@@ -26,9 +27,9 @@ export class GithubStarsWidgetEditComponent implements EditableWidgetForm<Github
   });
 
   constructor(
-    private overlayRef: OverlayRef,
     @Inject(WidgetState)
     private currentState: GithubStarsWidgetState,
+    private modalService: ModalService,
   ) {}
 
   getNewData(): Observable<GithubStarsWidgetState> {
@@ -41,7 +42,7 @@ export class GithubStarsWidgetEditComponent implements EditableWidgetForm<Github
   }
 
   close() {
-    this.overlayRef.detach();
+    this.modalService.closeModal();
   }
 
   ngOnDestroy(): void {

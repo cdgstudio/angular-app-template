@@ -4,3 +4,5 @@ export { ModalHeaderComponent } from './components/modal-header/modal-header.com
 export { ModalBodyComponent } from './components/modal-body/modal-body.component';
 export { ModalFooterComponent } from './components/modal-footer/modal-footer.component';
 export { ModalTitleComponent } from './components/modal-title/modal-title.component';
+export { ModalService } from './services/modal.service';
+export { CloseModalDirective } from './directives/close-modal.directive';

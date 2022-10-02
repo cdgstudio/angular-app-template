@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-modal-header',
@@ -6,4 +7,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./modal-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ModalHeaderComponent {}
+export class ModalHeaderComponent {
+  constructor(private modalService: ModalService) {}
+
+  close() {
+    this.modalService.closeModal();
+  }
+}

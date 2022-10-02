@@ -1,7 +1,6 @@
-import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
-import { combineLatest, finalize, forkJoin, Observable, switchMap, lastValueFrom, tap, take } from 'rxjs';
+import { combineLatest, finalize, lastValueFrom, switchMap, take } from 'rxjs';
+import { ModalService } from '../../../../../../../shared/modal';
 import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
 import { DashboardStateService } from '../../../../../service/dashboard-state.service';
 import { EditableWidgetFormImport, EDIT_WIDGET_COMPONENT, EDIT_WIDGET_MODULE, isStatefullWidget } from '../../editable';
@@ -20,9 +19,9 @@ export class WidgetToolbarComponent {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private overlay: Overlay,
     private moduleLoaderService: ModuleLoaderService,
     private id: WidgetId,
+    private modalService: ModalService,
 
     @Host() @Inject(WIDGET) private widget: Widget,
     @Optional()
@@ -70,27 +69,18 @@ export class WidgetToolbarComponent {
     const moduleRef = await this.moduleLoaderService.loadModuleAsync(this.moduleSourceImport!);
     const EditWidgetFormComponent = moduleRef.injector.get(EDIT_WIDGET_COMPONENT); // @todo: fix type
 
-    const overlayRef = this.overlay.create({
-      positionStrategy: new GlobalPositionStrategy().centerHorizontally().centerVertically(),
-      hasBackdrop: true,
-    });
-
     const currentState = await lastValueFrom(widget.getState().pipe(take(1))); // @todo: make is as observable
 
     const widgetInjector = Injector.create({
       providers: [
-        {
-          provide: OverlayRef,
-          useValue: overlayRef,
-        },
         {
           provide: WidgetState,
           useValue: currentState,
         },
       ],
     });
-    const portal = new ComponentPortal(EditWidgetFormComponent, null, widgetInjector);
-    const ref = overlayRef.attach(portal);
+
+    const ref = this.modalService.showModal(EditWidgetFormComponent, { injector: widgetInjector });
 
     ref.instance
       .getNewData()

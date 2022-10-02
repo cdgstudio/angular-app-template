@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ModalService } from '../../../../../shared/modal';
 import { DashboardStateService, WidgetState } from '../../../service/dashboard-state.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { DashboardStateService, WidgetState } from '../../../service/dashboard-s
 export class DashboardPage {
   widgets$ = this.dashboardStateService.state$;
 
-  constructor(private dashboardStateService: DashboardStateService) {}
+  constructor(private dashboardStateService: DashboardStateService, modalService: ModalService) {}
 
   addNewWidget() {
     this.dashboardStateService.addRandomWidget().subscribe();
