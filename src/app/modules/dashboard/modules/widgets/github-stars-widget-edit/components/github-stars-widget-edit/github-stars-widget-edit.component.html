@@ -4,19 +4,26 @@
   </app-modal-header>
 
   <app-modal-body>
-    <form id="form" [formGroup]="form" (ngSubmit)="update()">
+    <form app-form-column id="form" [formGroup]="form" (ngSubmit)="update()">
       <div>
         <label for="organization">Organization</label>
-        <input id="organization" type="text" formControlName="organization" autocomplete="off" cdkFocusInitial />
+        <input
+          app-input
+          id="organization"
+          type="text"
+          formControlName="organization"
+          autocomplete="off"
+          cdkFocusInitial
+        />
       </div>
       <div>
         <label for="Project">Project</label>
-        <input id="Project" type="text" formControlName="project" autocomplete="off" />
+        <input app-input id="Project" type="text" formControlName="project" autocomplete="off" />
       </div>
     </form>
   </app-modal-body>
 
   <app-modal-footer>
-    <button form="form" type="submit" [disabled]="!form.valid">Update</button>
+    <button app-button form="form" type="submit" [disabled]="!form.valid">Update</button>
   </app-modal-footer>
 </app-modal>

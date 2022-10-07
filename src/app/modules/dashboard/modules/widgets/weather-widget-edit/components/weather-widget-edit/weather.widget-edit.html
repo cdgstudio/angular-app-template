@@ -7,12 +7,12 @@
     <form id="form" [formGroup]="form" (ngSubmit)="update()">
       <div>
         <label for="city">City</label>
-        <input id="city" type="text" formControlName="city" autocomplete="off" cdkFocusInitial />
+        <input app-input id="city" type="text" formControlName="city" autocomplete="off" cdkFocusInitial />
       </div>
     </form>
   </app-modal-body>
 
   <app-modal-footer>
-    <button type="submit" form="form" [disabled]="!form.valid">Update</button>
+    <button app-button type="submit" form="form" [disabled]="!form.valid">Update</button>
   </app-modal-footer>
 </app-modal>
