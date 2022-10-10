@@ -7,24 +7,25 @@ app-modal {
 }
 
 ul {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 li {
-  transition: scale 300ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: scale 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
   padding: 1rem;
 }
 
 li:hover {
-  scale: 1.1;
+  scale: 1.025;
 }
 
 ul:has(:hover) li:not(:hover) {
-  scale: 0.95;
+  scale: 0.975;
 }
 
 button {
