@@ -13,6 +13,11 @@ const WIDGET_LOADERS = [
     type: 'github-stars',
     loadWidgetModule: () => import('./../modules/widgets/github-stars-widget').then((m) => m.GithubStarsWidgetModule),
   },
+  {
+    type: 'yt-statistics',
+    loadWidgetModule: () =>
+      import('./../modules/widgets/yt-channel-statistics').then((m) => m.YtChannelStatisticsModule),
+  },
 ];
 
 @Directive({

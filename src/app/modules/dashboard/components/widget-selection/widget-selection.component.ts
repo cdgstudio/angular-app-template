@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ModalService } from '../../../../shared/modal';
-import { DashboardStateService } from '../../service/dashboard-state.service';
+import { AvailableWidgetType, DashboardStateService } from '../../service/dashboard-state.service';
 
 @Component({
   selector: 'app-widget-selection',
@@ -9,7 +9,7 @@ import { DashboardStateService } from '../../service/dashboard-state.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetSelectionComponent {
-  widgets = [
+  widgets: { type: AvailableWidgetType; description: string }[] = [
     {
       type: 'weather',
       description: 'Weather widget',
@@ -18,7 +18,11 @@ export class WidgetSelectionComponent {
       type: 'github-stars',
       description: 'GitHub stars',
     },
-  ] as const;
+    {
+      type: 'yt-statistics',
+      description: 'YouTube statistics',
+    },
+  ];
 
   constructor(private dashboardStateService: DashboardStateService, private modalService: ModalService) {}
 

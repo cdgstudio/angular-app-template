@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, defer, map, Observable, switchMap, take, tap, timer } from 'rxjs';
 import { WidgetId } from '../modules/widgets/widget';
 
+export type AvailableWidgetType = 'weather' | 'github-stars' | 'yt-statistics';
+
 export interface WidgetState<T = undefined> {
-  readonly type: 'weather' | 'github-stars';
+  readonly type: AvailableWidgetType;
   readonly id: string;
   data: T;
 }

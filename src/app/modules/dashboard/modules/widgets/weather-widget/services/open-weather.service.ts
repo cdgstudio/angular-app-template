@@ -13,6 +13,6 @@ export class OpenWeatherService {
   getWeatherForCity(city: string): Observable<OpenWeather> {
     const params = new HttpParams({ fromObject: { city } });
 
-    return this.http.get<OpenWeather>(`${environment.openWeatherBaseUrl}/weather`, { params });
+    return this.http.get<OpenWeather>(`${environment.apiUrl}/weather`, { params });
   }
 }

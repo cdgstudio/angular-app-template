@@ -1,0 +1,16 @@
+<app-widget-toolbar>
+  <ng-container title> Channel {{ channel$ | async | uppercase }} </ng-container>
+</app-widget-toolbar>
+
+<div *ngIf="stats$ | async as stats" class="content">
+  <dl>
+    <dt>Video count</dt>
+    <dd>{{ stats.videoCount | number }}</dd>
+
+    <dt>View count</dt>
+    <dd>{{ stats.viewCount | number }}</dd>
+
+    <dt>Views per video</dt>
+    <dd>{{ (stats.viewCount / stats.videoCount) | number: '1.0-0' }}</dd>
+  </dl>
+</div>

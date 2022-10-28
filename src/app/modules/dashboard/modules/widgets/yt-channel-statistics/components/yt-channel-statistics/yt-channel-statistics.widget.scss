@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.content {
+  height: 100%;
+  padding: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  display: flex;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+dd {
+  margin-left: 0;
+  margin-right: 0;
+}

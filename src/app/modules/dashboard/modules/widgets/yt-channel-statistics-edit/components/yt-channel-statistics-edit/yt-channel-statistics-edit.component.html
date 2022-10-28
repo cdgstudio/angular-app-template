@@ -1,0 +1,18 @@
+<app-modal cdkTrapFocus cdkTrapFocusAutoCapture>
+  <app-modal-header>
+    <h2 app-modal-title>YouTube channel</h2>
+  </app-modal-header>
+
+  <app-modal-body>
+    <form app-form-column id="form" [formGroup]="form" (ngSubmit)="update()">
+      <div>
+        <label for="channel">Channel</label>
+        <input app-input id="channel" type="text" formControlName="channel" autocomplete="off" cdkFocusInitial />
+      </div>
+    </form>
+  </app-modal-body>
+
+  <app-modal-footer>
+    <button app-button form="form" type="submit" [disabled]="!form.valid">Update</button>
+  </app-modal-footer>
+</app-modal>
