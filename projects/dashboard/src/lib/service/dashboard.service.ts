@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
-import { WidgetStateInterface } from '../models/widget-state';
+import { WidgetStateInterface } from '../models/widget';
 import { DashboardStateService } from './dashboard-store.service';
 
 @Injectable()

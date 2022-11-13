@@ -33,7 +33,7 @@ export const handler: Handler = async (event, context) => {
       },
     });
 
-    if (!('items' in response.data)) {
+    if ('items' in response.data === false) {
       return {
         statusCode: 404,
         body: 'Channel not found',

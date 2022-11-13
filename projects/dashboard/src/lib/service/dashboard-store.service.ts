@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { WidgetStateInterface } from '../models/widget-state';
+import { WidgetStateInterface } from '../models/widget';
 
 export abstract class DashboardStateService {
   abstract restoreState(): Observable<WidgetStateInterface[]>;

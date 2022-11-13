@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { WidgetStateInterface } from '../models/widget-state';
+import { WidgetStateInterface } from '../models/widget';
 import { DashboardStateService } from './dashboard-store.service';
 
 export class InMemoryStateService implements DashboardStateService {

@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
-import { StatelessWidget } from './stateless-widget';
+import { Widget } from './widget';
 
 export interface ReloadableWidget {
   reload(): Observable<void>;
 }
 
-export function isReloadableWidget(widget: StatelessWidget): widget is ReloadableWidget {
-  return 'reload' in widget;
+export function isReloadableWidget(widget: Widget): widget is ReloadableWidget {
+  return !!(widget as ReloadableWidget).reload;
 }

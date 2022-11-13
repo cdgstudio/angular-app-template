@@ -1,21 +1,20 @@
 import { Directive, Injector, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
-import { isStatefullWidget, WidgetId, WidgetStateInterface, WIDGET_COMPONENT } from '@cdgstudio/dashboard';
+import { isStatefullWidget, WIDGET_ID, WidgetStateInterface, WIDGET_COMPONENT } from '@cdgstudio/dashboard';
 import { defaultIfEmpty, distinctUntilKeyChanged, filter, map, of, ReplaySubject, switchMap, tap } from 'rxjs';
 import { ModuleLoaderService } from '../../../shared/module-loader';
 
 const WIDGET_LOADERS = [
   {
     type: 'weather',
-    loadWidgetModule: () => import('./../modules/widgets/weather-widget').then((m) => m.WeatherWidgetModule),
+    loadWidgetModule: () => import('../widgets/weather-widget').then((m) => m.WeatherWidgetModule),
   },
   {
     type: 'github-stars',
-    loadWidgetModule: () => import('./../modules/widgets/github-stars-widget').then((m) => m.GithubStarsWidgetModule),
+    loadWidgetModule: () => import('../widgets/github-stars-widget').then((m) => m.GithubStarsWidgetModule),
   },
   {
     type: 'yt-statistics',
-    loadWidgetModule: () =>
-      import('./../modules/widgets/yt-channel-statistics').then((m) => m.YtChannelStatisticsModule),
+    loadWidgetModule: () => import('../widgets/yt-channel-statistics').then((m) => m.YtChannelStatisticsModule),
   },
 ];
 
@@ -50,7 +49,7 @@ export class WidgetLoaderDirective implements OnInit, OnDestroy {
         map(([widgetData, ngModuleRef]) => {
           const injector = Injector.create({
             parent: this.injector,
-            providers: [{ provide: WidgetId, useValue: widgetData.id }],
+            providers: [{ provide: WIDGET_ID, useValue: widgetData.id }],
           });
           const WidgetComponent = ngModuleRef.injector.get(WIDGET_COMPONENT);
 

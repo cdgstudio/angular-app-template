@@ -1,5 +1,5 @@
 import { defer, Observable, of } from 'rxjs';
-import { WidgetStateInterface } from '../models/widget-state';
+import { WidgetStateInterface } from '../models/widget';
 import { DashboardStateService } from './dashboard-store.service';
 
 const LOCAL_STORE_KEY = 'DASHBOARD_STATE';
