@@ -11,9 +11,9 @@ import {
   WidgetState,
   WIDGET_ID,
 } from '@cdgstudio/dashboard';
-import { concat, finalize, lastValueFrom, switchMap, take } from 'rxjs';
+import { WidgetLoaderService } from '@cdgstudio/dashboard/loader';
+import { combineLatest, finalize, lastValueFrom, switchMap, take } from 'rxjs';
 import { ModalService } from '../../../../../../../shared/modal';
-import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
 
 @Component({
   selector: 'app-widget-toolbar',
@@ -27,7 +27,7 @@ export class WidgetToolbarComponent {
   constructor(
     @Inject(WIDGET_ID) private widgetId: string,
     private changeDetector: ChangeDetectorRef,
-    private moduleLoaderService: ModuleLoaderService,
+    private widgetLoaderService: WidgetLoaderService,
     private modalService: ModalService,
 
     @Host() @Inject(WIDGET) private widget: Widget,
@@ -73,7 +73,7 @@ export class WidgetToolbarComponent {
 
     this.isReloading = true;
 
-    const moduleRef = await this.moduleLoaderService.loadModuleAsync(this.moduleSourceImport!);
+    const moduleRef = await this.widgetLoaderService.loadModuleAsync(this.moduleSourceImport!);
     const EditWidgetFormComponent = moduleRef.injector.get(EDIT_WIDGET_COMPONENT); // @todo: fix type
 
     const currentState = await lastValueFrom(widget.getState().pipe(take(1))); // @todo: make is as observable
@@ -93,7 +93,10 @@ export class WidgetToolbarComponent {
       .getNewData()
       .pipe(
         switchMap((newState) =>
-          concat([this.dashboardStateService.updateWidgetState(this.widgetId, newState), widget.setState(newState)]),
+          combineLatest([
+            this.dashboardStateService.updateWidgetState(this.widgetId, newState),
+            widget.setState(newState),
+          ]),
         ),
         finalize(() => {
           this.isReloading = false;

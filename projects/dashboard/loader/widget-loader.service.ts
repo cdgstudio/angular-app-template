@@ -7,7 +7,7 @@ export interface CompileConfig {
 @Injectable({
   providedIn: 'root',
 })
-export class ModuleLoaderService {
+export class WidgetLoaderService {
   private loadedModules = new Map<Awaited<unknown>, NgModuleRef<unknown>>();
 
   constructor(private compiler: Compiler, private injector: Injector) {}

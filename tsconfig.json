@@ -21,6 +21,7 @@
     "lib": ["es2020", "dom"],
     "paths": {
       "@cdgstudio/dashboard": ["projects/dashboard/src/public-api.ts"],
+      "@cdgstudio/dashboard/*": ["projects/dashboard/*"],
       "environments": ["src/environments/environment.ts"]
     }
   },
