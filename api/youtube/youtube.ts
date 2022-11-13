@@ -22,8 +22,8 @@ export const handler: Handler = async (event, context) => {
 
   const params = {
     key,
-    forUsername: channel,
-    part: 'statistics',
+    id: channel,
+    part: 'snippet,statistics',
   };
   try {
     const response = await axios.get(`https://www.googleapis.com/youtube/v3/channels`, {
@@ -40,12 +40,12 @@ export const handler: Handler = async (event, context) => {
       };
     }
 
-    const stats = response.data.items[0].statistics;
-    stats.channel = channel;
-
     return {
       statusCode: 200,
-      body: JSON.stringify(stats),
+      body: JSON.stringify({
+        ...response.data.items[0].statistics,
+        channel: response.data.items[0].snippet.title,
+      }),
     };
   } catch (error) {
     if (axios.isAxiosError(error)) {

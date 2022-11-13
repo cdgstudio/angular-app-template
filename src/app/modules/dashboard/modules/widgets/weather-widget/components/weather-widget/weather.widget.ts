@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { EDIT_WIDGET_MODULE, WIDGET, StatelessWidget, ReloadableWidget, StatefullWidget } from '@cdgstudio/dashboard';
 import { map, Observable, of, tap } from 'rxjs';
-import { EDIT_WIDGET_MODULE, ReloadableWidget, StatefullWidget, Widget, WIDGET } from '../../../widget';
 import { WeatherWidgetState } from '../../models/state.models';
 import { OpenWeather } from '../../services/open-weather.models';
 import { OpenWeatherService } from '../../services/open-weather.service';
@@ -21,7 +21,7 @@ import { OpenWeatherService } from '../../services/open-weather.service';
     },
   ],
 })
-export class WeatherWidget implements Widget, ReloadableWidget, StatefullWidget<WeatherWidgetState> {
+export class WeatherWidget implements StatelessWidget, ReloadableWidget, StatefullWidget<WeatherWidgetState> {
   protected city = 'Warsaw';
   protected lastResponse?: OpenWeather;
 

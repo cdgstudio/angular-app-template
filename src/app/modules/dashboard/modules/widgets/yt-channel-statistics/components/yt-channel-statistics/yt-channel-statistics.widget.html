@@ -1,5 +1,5 @@
 <app-widget-toolbar>
-  <ng-container title> Channel {{ channel$ | async | uppercase }} </ng-container>
+  <ng-container title> Channel {{ channel$ | async }} </ng-container>
 </app-widget-toolbar>
 
 <div *ngIf="stats$ | async as stats" class="content">

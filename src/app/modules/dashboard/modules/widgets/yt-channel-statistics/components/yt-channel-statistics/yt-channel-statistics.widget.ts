@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
-import { EMPTY, map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
-import { EDIT_WIDGET_MODULE, StatefullWidget, Widget, WIDGET } from '../../../widget';
+import { EDIT_WIDGET_MODULE, StatefullWidget, WIDGET, StatelessWidget } from '@cdgstudio/dashboard';
+import { EMPTY, map, Observable, of, ReplaySubject, shareReplay, switchMap } from 'rxjs';
 import { YtChannelStatisticsService } from '../../services/yt-channel-statistics.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { YtChannelStatisticsService } from '../../services/yt-channel-statistics
     },
   ],
 })
-export class YtChannelStatisticsWidget implements Widget, StatefullWidget<string>, OnDestroy {
+export class YtChannelStatisticsWidget implements StatelessWidget, StatefullWidget<string>, OnDestroy {
   private channelId$ = new ReplaySubject<string>(1);
   stats$ = this.channelId$.pipe(
     switchMap((channelId) => this.ytChannelStatisticsService.getChannelStatistics(channelId)),
@@ -30,7 +30,11 @@ export class YtChannelStatisticsWidget implements Widget, StatefullWidget<string
   constructor(private ytChannelStatisticsService: YtChannelStatisticsService) {}
 
   setState(value: string): Observable<void> {
-    this.channelId$.next(value);
+    if (value === undefined) {
+      this.channelId$.next('UCy-ez61m5LdG3FQVr-4Crcw');
+    } else {
+      this.channelId$.next(value);
+    }
 
     return EMPTY;
   }

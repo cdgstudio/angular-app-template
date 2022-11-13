@@ -1,10 +1,9 @@
-import { OverlayRef } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EditableWidgetForm, WidgetState } from '@cdgstudio/dashboard';
 import { Observable, Subject } from 'rxjs';
 import { ModalService } from '../../../../../../../shared/modal';
 import { GithubStarsWidgetState } from '../../../github-stars-widget';
-import { EditableWidgetForm, WidgetState } from '../../../widget';
 
 @Component({
   selector: 'app-github-stars-widget-edit',

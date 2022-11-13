@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EditableWidgetForm, WidgetState } from '@cdgstudio/dashboard';
 import { Observable, Subject } from 'rxjs';
 import { ModalService } from '../../../../../../../shared/modal';
-import { EditableWidgetForm, WidgetState } from '../../../widget';
 
 @Component({
   selector: 'app-yt-channel-statistics-edit',

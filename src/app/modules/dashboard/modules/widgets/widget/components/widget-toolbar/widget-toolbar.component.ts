@@ -1,12 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Host, Inject, Injector, Optional } from '@angular/core';
-import { combineLatest, finalize, lastValueFrom, switchMap, take } from 'rxjs';
+import {
+  DashboardService,
+  EditableWidgetFormImport,
+  EDIT_WIDGET_COMPONENT,
+  EDIT_WIDGET_MODULE,
+  isReloadableWidget,
+  isStatefullWidget,
+  StatelessWidget,
+  WIDGET,
+  WidgetId,
+  WidgetState,
+} from '@cdgstudio/dashboard';
+import { concat, finalize, lastValueFrom, switchMap, take } from 'rxjs';
 import { ModalService } from '../../../../../../../shared/modal';
 import { ModuleLoaderService } from '../../../../../../../shared/module-loader';
-import { DashboardStateService } from '../../../../../service/dashboard-state.service';
-import { EditableWidgetFormImport, EDIT_WIDGET_COMPONENT, EDIT_WIDGET_MODULE, isStatefullWidget } from '../../editable';
-import { isReloadableWidget } from '../../reloadable';
-import { WidgetId, WidgetState } from '../../tokens';
-import { Widget, WIDGET } from '../../widget';
 
 @Component({
   selector: 'app-widget-toolbar',
@@ -18,17 +25,17 @@ export class WidgetToolbarComponent {
   reloadableWidget = isReloadableWidget(this.widget);
 
   constructor(
+    @Inject(WidgetId) private widgetId: string,
     private changeDetector: ChangeDetectorRef,
     private moduleLoaderService: ModuleLoaderService,
-    private id: WidgetId,
     private modalService: ModalService,
 
-    @Host() @Inject(WIDGET) private widget: Widget,
+    @Host() @Inject(WIDGET) private widget: StatelessWidget,
     @Optional()
     @Host()
     @Inject(EDIT_WIDGET_MODULE)
     public moduleSourceImport: EditableWidgetFormImport | null,
-    private dashboardStateService: DashboardStateService, // @todo: fix import place
+    private dashboardStateService: DashboardService, // @todo: fix import place
   ) {}
 
   protected isReloading = false;
@@ -54,7 +61,7 @@ export class WidgetToolbarComponent {
   remove() {
     // @todo: add not blocking confirm
     if (confirm('Are you sure to remove widget?')) {
-      this.dashboardStateService.removeWidget(this.id).subscribe();
+      this.dashboardStateService.removeWidget(this.widgetId).subscribe();
     }
   }
 
@@ -86,7 +93,7 @@ export class WidgetToolbarComponent {
       .getNewData()
       .pipe(
         switchMap((newState) =>
-          combineLatest([this.dashboardStateService.updateWidgetState(this.id, newState), widget.setState(newState)]),
+          concat([this.dashboardStateService.updateWidgetState(this.widgetId, newState), widget.setState(newState)]),
         ),
         finalize(() => {
           this.isReloading = false;

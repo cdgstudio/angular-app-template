@@ -1,8 +1,7 @@
 import { Directive, Injector, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { isStatefullWidget, WidgetId, WidgetStateInterface, WIDGET_COMPONENT } from '@cdgstudio/dashboard';
 import { defaultIfEmpty, distinctUntilKeyChanged, filter, map, of, ReplaySubject, switchMap, tap } from 'rxjs';
 import { ModuleLoaderService } from '../../../shared/module-loader';
-import { isStatefullWidget, WidgetId, WIDGET_COMPONENT } from '../modules/widgets/widget';
-import { WidgetState } from '../service/dashboard-state.service';
 
 const WIDGET_LOADERS = [
   {
@@ -24,13 +23,17 @@ const WIDGET_LOADERS = [
   selector: '[appWidgetLoader]',
 })
 export class WidgetLoaderDirective implements OnInit, OnDestroy {
-  @Input() set appWidgetLoader(widgetData: WidgetState) {
+  @Input() set appWidgetLoader(widgetData: WidgetStateInterface) {
     this.widgetData$$.next(widgetData);
   }
 
-  private widgetData$$ = new ReplaySubject<WidgetState>(1);
+  private widgetData$$ = new ReplaySubject<WidgetStateInterface>(1);
 
-  constructor(private viewContainer: ViewContainerRef, private moduleLoaderService: ModuleLoaderService) {}
+  constructor(
+    private viewContainer: ViewContainerRef,
+    private moduleLoaderService: ModuleLoaderService,
+    private injector: Injector,
+  ) {}
 
   ngOnInit(): void {
     this.widgetData$$
@@ -46,7 +49,7 @@ export class WidgetLoaderDirective implements OnInit, OnDestroy {
         ),
         map(([widgetData, ngModuleRef]) => {
           const injector = Injector.create({
-            parent: ngModuleRef.injector,
+            parent: this.injector,
             providers: [{ provide: WidgetId, useValue: widgetData.id }],
           });
           const WidgetComponent = ngModuleRef.injector.get(WIDGET_COMPONENT);

@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
+import {
+  DashboardService,
+  DashboardStateService,
+  LocalStorageService,
+  WidgetStateInterface,
+} from '@cdgstudio/dashboard';
 import { ModalService } from '../../../../../shared/modal';
-import { DashboardStateService, WidgetState } from '../../../service/dashboard-state.service';
 import { WidgetSelectionComponent } from '../../widget-selection/widget-selection.component';
 
 @Component({
@@ -8,18 +13,30 @@ import { WidgetSelectionComponent } from '../../widget-selection/widget-selectio
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    DashboardService,
+    {
+      provide: DashboardStateService,
+      useClass: LocalStorageService,
+    },
+  ],
 })
 export class DashboardPage {
-  widgets$ = this.dashboardStateService.state$;
+  widgets$ = this.dashboardService.state$;
 
-  constructor(private dashboardStateService: DashboardStateService, private modalService: ModalService) {}
-
-  addNewWidget() {
-    this.modalService.showModal(WidgetSelectionComponent);
-    // this.dashboardStateService.addRandomWidget().subscribe();
+  constructor(
+    private dashboardService: DashboardService,
+    private modalService: ModalService,
+    private injector: Injector,
+  ) {
+    this.dashboardService.restoreState().subscribe();
   }
 
-  trackById(index: number, widget: WidgetState) {
+  addNewWidget() {
+    this.modalService.showModal(WidgetSelectionComponent, { injector: this.injector });
+  }
+
+  trackById(index: number, widget: WidgetStateInterface) {
     return widget.id;
   }
 }

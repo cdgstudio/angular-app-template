@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { defer, EMPTY, Observable, ReplaySubject, switchMap, take } from 'rxjs';
-import { EDIT_WIDGET_MODULE, StatefullWidget, Widget, WIDGET } from '../../../widget';
+import { EDIT_WIDGET_MODULE, StatefullWidget, WIDGET, StatelessWidget } from '@cdgstudio/dashboard';
+import { defer, EMPTY, Observable, ReplaySubject, switchMap } from 'rxjs';
 import { GithubStarsWidgetState } from '../../models/state.models';
 import { GithubService } from '../../services/github.service';
 
@@ -20,7 +20,7 @@ import { GithubService } from '../../services/github.service';
     },
   ],
 })
-export class GithubStarsWidget implements Widget, StatefullWidget<GithubStarsWidgetState> {
+export class GithubStarsWidget implements StatelessWidget, StatefullWidget<GithubStarsWidgetState> {
   state$ = new ReplaySubject<GithubStarsWidgetState>(1);
   stars$ = this.state$.pipe(
     switchMap(({ organization, project }) => this.githubService.getProjectStars(organization, project)),

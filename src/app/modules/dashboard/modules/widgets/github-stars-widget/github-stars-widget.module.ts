@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GithubStarsWidget } from './components/github-stars-widget/github-stars.widget';
-import { WIDGET_COMPONENT, WidgetModule } from '../widget';
+import { WidgetModule } from '../widget';
+import { WIDGET_COMPONENT } from '@cdgstudio/dashboard';
 
 @NgModule({
   declarations: [GithubStarsWidget],
