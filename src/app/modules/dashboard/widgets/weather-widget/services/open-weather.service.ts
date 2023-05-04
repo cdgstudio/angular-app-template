@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments';
-import { delay, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OpenWeather } from './open-weather.models';
 
 @Injectable({

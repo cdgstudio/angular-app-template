@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  openWeatherBaseUrl: '/.netlify/functions',
+  apiUrl: '/.netlify/functions',
 };
