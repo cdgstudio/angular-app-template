@@ -1,1 +1,3 @@
-export { DashboardModule } from './dashboard.module';
+import { DashboardModule } from './dashboard.module';
+
+export default DashboardModule;

@@ -1,1 +1,3 @@
-export { LostPasswordModule } from './lost-password.module';
+import { LostPasswordModule } from './lost-password.module';
+
+export default LostPasswordModule;

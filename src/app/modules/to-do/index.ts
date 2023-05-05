@@ -1,1 +1,3 @@
-export { ToDoModule } from './to-do.module';
+import { ToDoModule } from './to-do.module';
+
+export default ToDoModule;

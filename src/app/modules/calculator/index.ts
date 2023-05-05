@@ -1,1 +1,3 @@
-export { CalculatorModule } from './calculator.module';
+import { CalculatorModule } from './calculator.module';
+
+export default CalculatorModule;

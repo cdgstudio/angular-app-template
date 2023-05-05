@@ -11,15 +11,15 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        loadChildren: () => import('./modules/dashboard').then((m) => m.DashboardModule),
+        loadChildren: () => import('./modules/dashboard'),
       },
       {
         path: 'to-do',
-        loadChildren: () => import('./modules/to-do').then((m) => m.ToDoModule),
+        loadChildren: () => import('./modules/to-do'),
       },
       {
         path: 'calculator',
-        loadChildren: () => import('./modules/calculator').then((m) => m.CalculatorModule),
+        loadChildren: () => import('./modules/calculator'),
       },
     ],
   },
@@ -29,15 +29,15 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadChildren: () => import('./modules/auth/login').then((m) => m.LoginModule),
+        loadChildren: () => import('./modules/auth/login'),
       },
       {
         path: 'lost-password',
-        loadChildren: () => import('./modules/auth/lost-password').then((m) => m.LostPasswordModule),
+        loadChildren: () => import('./modules/auth/lost-password'),
       },
       {
         path: 'sign-up',
-        loadChildren: () => import('./modules/auth/sign-up').then((m) => m.SignUpModule),
+        loadChildren: () => import('./modules/auth/sign-up'),
       },
     ],
   },
